@@ -43,7 +43,7 @@ header {
   padding: 20px;
   color: #FCF8F2;
   background: #34ABE0;
-  border-radius: 25px 25px 25px 5px;
+  border-radius: 25px 25px 25px 0px;
   margin-bottom: 5px;
   margin-top: 5px;
 }
@@ -55,9 +55,13 @@ header {
   padding: 20px;
   color: #FCF8F2;
   background: #FF525D;
-  border-radius: 25px 25px 5px 25px;
+  border-radius: 25px 25px 0px 25px;
   margin-bottom: 5px;
   margin-top: 5px;
+}
+
+.message:hover {
+  background: rgb(252, 0, 17);
 }
 
 .blink {

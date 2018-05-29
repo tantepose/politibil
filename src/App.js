@@ -12,7 +12,9 @@ class App extends Component {
         <Header />
         <div className = "feed">
           <Message text = "Vis meg Oslo-politiet! 😀" />
-          <TestMessage />
+          <TestMessage text = "Hei! Nå er jeg ferdig med å skrive." delay = {1000}/>
+          <TestMessage text = "Neida. Litt til." delay = {2000}/>
+          <TestMessage text = "Sånn!" delay = {3000}/>
           <TweetList />
           <Message text = "Gi meg mer! 😍" />
         </div>

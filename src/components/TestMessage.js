@@ -16,7 +16,7 @@ class TestMessage extends Component {
             this.setState({
                 loading: false
             });
-        }.bind(this), 1500);
+        }.bind(this), this.props.delay);
     }
     
     
@@ -25,7 +25,7 @@ class TestMessage extends Component {
         <div className="tweet">
             { (this.state.loading) 
                 ? <Spinner />
-                : <p>Hei sveis!</p>
+                : <p>{this.props.text}</p>
             }
         </div>
       );
