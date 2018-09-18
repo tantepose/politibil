@@ -9,7 +9,6 @@ const T = new Twit(twitConfig);
 let district;
 
 // routes
-
 router.get('/:district', function (req,res,next) { //request, response, next()
     district = req.params.district;
     console.log('getting', district);
@@ -22,12 +21,11 @@ router.get('/:district', function (req,res,next) { //request, response, next()
         exclude_replies: true
     }, (err, data, response) => {
         if (!err) {
-            outputTweets(res, data);
+            gatherTweets(res, data);
             next();
         } else { //if the request fails
             console.log('Timeline failed: ' + err.message);
             res.json({
-                district: district,
                 error: err.message
             });
             next(err); //engage error handler with current error
@@ -35,8 +33,7 @@ router.get('/:district', function (req,res,next) { //request, response, next()
     });
 });
 
-// burde sikkert være middleware
-function outputTweets (res, data) {
+function gatherTweets (res, data) {
     let tweets = [];
 
     data.forEach(tweet => {
@@ -46,10 +43,22 @@ function outputTweets (res, data) {
         });
     });
 
-    res.json({
-        district: district,
-        tweets: tweets
+    let emojiTweet;
+    tweets.forEach(function (tweet, index, array) {
+        // inserting emojis (case sensitive, ikke bra)
+        emojiTweet = tweet.text
+            .replace('Enebakkveien', '👵')
+            .replace('Ryen', '🧒');
+        // recover the array
+        array[index] = {
+            text: emojiTweet, 
+            date: tweet.date
+        };
     });
+
+    res.json(
+        tweets
+    );
 }
 
 module.exports = router;
