@@ -49,6 +49,12 @@ header {
   margin-right: 30px;
 }
 
+.date {
+  font-size: .5em;
+  text-align: right;
+  margin-top: 15px;
+}
+
 .message {
   cursor: pointer;
   text-align: right;

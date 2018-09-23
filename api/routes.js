@@ -15,7 +15,7 @@ router.get('/:district', function (req,res,next) { //request, response, next()
 
     T.get('statuses/user_timeline', { 
         screen_name: district, 
-        count: 10,
+        count: 20,
         tweet_mode: 'extended',
         include_rts: false,
         exclude_replies: true
@@ -47,8 +47,12 @@ function gatherTweets (res, data) {
     tweets.forEach(function (tweet, index, array) {
         // inserting emojis (case sensitive, ikke bra)
         emojiTweet = tweet.text
-            .replace('Enebakkveien', '👵')
-            .replace('Ryen', '🧒');
+            .replace('Nødetatene', '🚓🚒🚑')
+            .replace('melding', '📞')
+            .replace('syklist', '🚲')
+            .replace('pistol', '🔫')
+            .replace('bil', '🚗')
+            .replace('bilen', '🚗');
         // recover the array
         array[index] = {
             text: emojiTweet, 
