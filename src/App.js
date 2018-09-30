@@ -2,19 +2,30 @@ import React, { Component } from 'react';
 import Header from './components/Header';
 import Tweet from './components/Tweet';
 import Message from './components/Message';
-import TestMessage from './components/TestMessage';
+// import TestMessage from './components/TestMessage';
 
 class App extends Component {
 
   state = {
     district: 'oslopolitiops',
-    tweets: []
+    allTweets: [],
+    visibleTweets: [],
+    page: 1
   }
 
   componentDidMount() {
     fetch('/api/' + this.state.district)
       .then(res => res.json())
-      .then(tweets => this.setState({ tweets: tweets }))
+      
+      .then(tweets => this.setState({ 
+        allTweets: tweets 
+      }))
+      
+      .then(this.setState({
+        visibleTweets: this.state.allTweets.slice(0, this.state.page * 10)
+      }))
+      
+      .then(console.log(this.state.allTweets))
   }
 
   render() {
@@ -24,8 +35,8 @@ class App extends Component {
         <div className = "feed">
           <Message text = {"Vis meg @" + this.state.district + "! 😀"} />
           
-          {this.state.tweets.map(tweet =>
-            <Tweet text = {tweet.text} date = {tweet.date} />
+          {this.state.visibleTweets.map(tweet =>
+            <Tweet text = {tweet.text} date = {tweet.date} key = {tweet.index}/>
           )}
           
           <Message text = "Gi meg mer! 😍" />

@@ -15,10 +15,11 @@ router.get('/:district', function (req,res,next) { //request, response, next()
 
     T.get('statuses/user_timeline', { 
         screen_name: district, 
-        count: 20,
+        count: 200,
         tweet_mode: 'extended',
         include_rts: false,
-        exclude_replies: true
+        exclude_replies: true,
+        trim_user: true
     }, (err, data, response) => {
         if (!err) {
             gatherTweets(res, data);
