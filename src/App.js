@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
 import Header from './components/Header';
-import Tweet from './components/Tweet';
+
 import Message from './components/Message';
-// import TestMessage from './components/TestMessage';
+import Loading from './components/Loading';
+import TweetList from './components/TweetList';
 
 class App extends Component {
-
+  
   state = {
     district: 'oslopolitiops',
-    allTweets: [],
-    visibleTweets: [],
-    page: 1
+    tweets: [],
+    page: 1,
+    loading: true
+  }
+
+  onMoreClick = () => {
+    this.setState(prevState => ({
+      page: prevState.page + 1
+    }));
+
+    console.log('KLIKK! side:', this.state.page);
   }
 
   componentDidMount() {
@@ -18,12 +27,9 @@ class App extends Component {
       .then(res => res.json())
       .then(tweets => {
         this.setState({ 
-          allTweets: tweets 
+          tweets: tweets,
+          loading: false
         });
-        this.setState({
-          visibleTweets: this.state.allTweets.slice(0, this.state.page * 10)
-        });
-        console.log(this.state.visibleTweets);
       })
   }
 
@@ -34,12 +40,15 @@ class App extends Component {
         <div className="feed">
           <Message text={"Vis meg @" + this.state.district + "! 😀"} />
           
-          {this.state.visibleTweets.map((tweet, key) =>
-            <Tweet text={tweet.text} date={tweet.date} key={key}/>
-          )}
-          
-          <Message text = "Gi meg mer! 😍" />
-          {/* <TestMessage text = "Hei! Nå er jeg ferdig med å skrive." delay = {3000}/> */}
+          { (this.state.loading) 
+            ? <Loading /> 
+            : <TweetList tweetList = {this.state.tweets.slice(0, this.state.page*10)} />
+          }
+
+          { (this.state.loading) 
+            ? null 
+            : <Message text="Gi meg mer! 😍" onClick={this.onMoreClick} />
+          }
         </div>
       </div>
     );

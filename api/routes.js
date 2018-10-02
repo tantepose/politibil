@@ -35,8 +35,8 @@ router.get('/:district', function (req,res,next) { //request, response, next()
 });
 
 function gatherTweets (res, data) {
+    // get the tweets in an array in orderly fashion
     let tweets = [];
-
     data.forEach(tweet => {
         tweets.push({
             text: tweet.full_text,
@@ -44,23 +44,28 @@ function gatherTweets (res, data) {
         });
     });
 
+    // replacing words with emojis
     let emojiTweet;
     tweets.forEach(function (tweet, index, array) {
-        // inserting emojis (case sensitive, ikke bra)
         emojiTweet = tweet.text
-            .replace('Nødetatene', '🚓🚒🚑')
+            .replace(/nødetatene/i, '🚓🚒🚑')
+            .replace('Politiet', '👮')
             .replace('melding', '📞')
             .replace('syklist', '🚲')
             .replace('pistol', '🔫')
             .replace('bil', '🚗')
-            .replace('bilen', '🚗');
-        // recover the array
+            .replace('bilen', '🚗')
+            .replace('MC', '🏍️')
+            .replace('brenner', '🔥')
+            .replace(/brann/i, '🔥')
+        // get the emojified strings back into the array
         array[index] = {
             text: emojiTweet, 
             date: tweet.date
         };
     });
 
+    // respond with the finished json
     res.json(
         tweets
     );
