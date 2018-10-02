@@ -16,27 +16,26 @@ class App extends Component {
   componentDidMount() {
     fetch('/api/' + this.state.district)
       .then(res => res.json())
-      
-      .then(tweets => this.setState({ 
-        allTweets: tweets 
-      }))
-      
-      .then(this.setState({
-        visibleTweets: this.state.allTweets.slice(0, this.state.page * 10)
-      }))
-      
-      .then(console.log(this.state.allTweets))
+      .then(tweets => {
+        this.setState({ 
+          allTweets: tweets 
+        });
+        this.setState({
+          visibleTweets: this.state.allTweets.slice(0, this.state.page * 10)
+        });
+        console.log(this.state.visibleTweets);
+      })
   }
 
   render() {
     return (
       <div className="App">
         <Header />
-        <div className = "feed">
-          <Message text = {"Vis meg @" + this.state.district + "! 😀"} />
+        <div className="feed">
+          <Message text={"Vis meg @" + this.state.district + "! 😀"} />
           
-          {this.state.visibleTweets.map(tweet =>
-            <Tweet text = {tweet.text} date = {tweet.date} key = {tweet.index}/>
+          {this.state.visibleTweets.map((tweet, key) =>
+            <Tweet text={tweet.text} date={tweet.date} key={key}/>
           )}
           
           <Message text = "Gi meg mer! 😍" />
