@@ -1,14 +1,16 @@
 var express = require('express');
 var router = express.Router(); 
+var moment = require('moment');
 
 //set up Twit (using ./config.js for credencials)
 const Twit = require('twit');
 const twitConfig = require('./config.js');
 const T = new Twit(twitConfig);
 
+// global variables
 let district;
 
-// routes
+// get api/:district - gets latests tweets from district
 router.get('/:district', function (req,res,next) { //request, response, next()
     district = req.params.district;
     console.log('getting', district);
@@ -18,7 +20,7 @@ router.get('/:district', function (req,res,next) { //request, response, next()
         count: 200,
         tweet_mode: 'extended',
         include_rts: false,
-        exclude_replies: true,
+        exclude_replies: false,
         trim_user: true
     }, (err, data, response) => {
         if (!err) {
@@ -35,12 +37,13 @@ router.get('/:district', function (req,res,next) { //request, response, next()
 });
 
 function gatherTweets (res, data) {
+    console.log('alt:', data);
     // get the tweets in an array in orderly fashion
     let tweets = [];
     data.forEach(tweet => {
         tweets.push({
             text: tweet.full_text,
-            date: tweet.created_at
+            timestamp: '@' + district + ' ' + moment(tweet.created_at).format('HH:mm, DD/MM/YY')
         });
     });
 
@@ -49,19 +52,45 @@ function gatherTweets (res, data) {
     tweets.forEach(function (tweet, index, array) {
         emojiTweet = tweet.text
             .replace(/nødetatene/i, '🚓🚒🚑')
-            .replace('Politiet', '👮')
+            
+            .replace('politibil', '🚓')
+            .replace('politiet', '👮')
+            .replace('politi', '👮')
+            
+            
+            .replace('ambulansen', '🚑')
+            .replace('ambulanse', '🚑')
+            
             .replace('melding', '📞')
             .replace('syklist', '🚲')
             .replace('pistol', '🔫')
-            .replace('bil', '🚗')
+            
+            .replace('biler', '🚘')
             .replace('bilen', '🚗')
+            .replace('bil', '🚗')
+            
             .replace('MC', '🏍️')
-            .replace('brenner', '🔥')
-            .replace(/brann/i, '🔥')
+            .replace('motorsykkel', '🏍️')
+            
+            .replace(/brannbilen/gi, '🚒')
+            .replace(/brannbil/gi, '🚒')
+
+            .replace('brannvesenet', '🚒')
+            .replace('brann', '🔥')
+            
+            .replace(/smellet/gi, '💥')
+            .replace(/smell/gi, '💥')
+            
+            .replace(/bussen/gi, '🚌')
+            .replace(/buss/gi, '🚌')
+
+            .replace(/fotgjengeren/gi, '🚶')
+            .replace(/fotgjenger/gi, '🚶')
+
         // get the emojified strings back into the array
         array[index] = {
             text: emojiTweet, 
-            date: tweet.date
+            timestamp: tweet.timestamp,
         };
     });
 

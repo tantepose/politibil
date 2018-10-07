@@ -36,8 +36,14 @@ header {
   flex-flow: column;
 }
 
+.tweetList {
+  display: flex;
+  flex-flow: column;
+}
+
 .tweet
 {
+  cursor: pointer;
   text-align: left;
   align-self: flex-start;
   padding: 20px;
@@ -47,6 +53,10 @@ header {
   margin-bottom: 5px;
   margin-top: 5px;
   margin-right: 30px;
+}
+
+.tweet:hover {
+  background: rgb(19, 154, 212);
 }
 
 .date {
