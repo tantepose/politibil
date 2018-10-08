@@ -16,7 +16,7 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: null, //'tantepose',
+      user: null,
       allTweets: [],
       visibleTweets: [],
       page: -1,
@@ -31,22 +31,28 @@ class App extends Component {
   
   // ON STARTUP
   componentDidMount() {
+    this.fetchNewTweets();
+  }
+
+  fetchNewTweets = () => {
+    window.scrollTo(0, 0);
+    console.log('Fetching tweets from @', this.state.district);
+
+    this.setState({
+      visibleTweets: [...this.state.visibleTweets, ...[{text: 'Ålbings, ' + this.state.user + '! 🚓'}]]
+    });
+    
     fetch('/api/' + this.state.district)
-      .then(res => res.json())
-      .then(tweets => {
-        this.setState({ 
-          allTweets: tweets,
-          loading: false
-        });
+    .then(res => res.json())
+    .then(tweets => {
+      this.setState({ 
+        allTweets: tweets,
+        loading: false
+      });
 
-        if (this.state.user) {
-          this.setState({
-            visibleTweets: [...this.state.visibleTweets, ...[{text: 'Ålbings, ' + this.state.user + '! 🚓'}]]
-          });
-        }
-
-        this.handleMoreClick();
-      })
+      this.handleMoreClick();
+      console.log('Done fetching from  @', this.state.district);
+    })
   }
 
   // CLICK HANDLERS
@@ -107,7 +113,15 @@ class App extends Component {
   setDistrict = (newDistrict) => {
     this.setState({
       district: newDistrict,
+      allTweets: [],
+      visibleTweets: [],
+      page: -1,
+      loading: true,
+      showLogin: false,
+      showAbout: false,
       showDistricts: false
+    }, () => {
+      this.fetchNewTweets();
     });
   }
 
@@ -121,14 +135,14 @@ class App extends Component {
           <Message text={"Vis meg @" + this.state.district + "! 😺"} />
           
           { (this.state.loading) 
-            ? <Loading /> 
+            ? <Loading user={this.state.user}/> 
             : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} />
           }
 
           <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
           
           { (this.state.user)
-            ? <Message text="Vis meg mine favoritter! 😻" onClick={this.handleFavoritesClick} />
+            ? <Message text={"Vis " + this.state.user + " sine favoritter! 😻"} onClick={this.handleFavoritesClick} />
             : <Message text="La meg logge på! 😻" onClick={this.handleLoginClick} />
           }
                     
