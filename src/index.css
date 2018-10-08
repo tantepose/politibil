@@ -82,16 +82,33 @@ header {
   background: rgb(252, 0, 17);
 }
 
-.blink {
-  color: #FF525D;
-  text-align: right;
-  right: -10px;
-  transition: 0.5s;
-  animation:fade 1000ms infinite;
-  -webkit-animation:fade 1000ms infinite;
-  margin: 0px;
-  margin-bottom: 5px;
+/* FORMS */
+
+form {
+  padding: 5px;
+  font-family: 'Montserrat', sans-serif;
+  width: 50px;
+  display: inline;
 }
+
+input[type=text] {
+  background: transparent;
+  color: #FCF8F2;
+  font-family: 'Montserrat', sans-serif;
+  text-align: right;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  font-size: 1.2em;
+}
+
+input[type=submit] {
+  background: transparent;
+  color: #FCF8F2;
+  border: none;
+  font-size: 1.2em;
+}
+
 
 /* ANIMASJON YO */
 
