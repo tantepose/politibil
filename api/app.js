@@ -38,7 +38,6 @@ app.get('/api/user/:username', (req, res) => {
     console.log('henter fra database!');
     db.collection('users').find().toArray(function(err, results) {
         if (err) return console.log(err)
-        console.log(results);
         res.json(results);
     });
 });

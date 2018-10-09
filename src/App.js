@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 import Header from './components/Header';
 import Message from './components/Message';
-import TweetList from './components/TweetList';
-import Tweet from './components/Tweet';
 import Loading from './components/Loading';
+import Tweet from './components/Tweet';
+import TweetList from './components/TweetList';
 import Login from './components/Login';
 import Districts from './components/Districts';
+import NewUser from './components/NewUser';
 
 class App extends Component {
   
@@ -16,93 +17,91 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: null,
+      user: 'tantepose',
+
+      favorites: [],
       allTweets: [],
       visibleTweets: [],
+      
       page: -1,
       loading: true,
+
       showLogin: false,
       showAbout: false,
-      showDistricts: false
+      showDistricts: false,
+      showNewUser: false,
+      showFavorites: false
     }
 
-    // this.getDistrict = this.getDistrict.bind(this);
   }
   
-  // ON STARTUP
+  // STARTUP
   componentDidMount() {
     this.fetchNewTweets();
+    this.fetchFavoriteTweets();
   }
 
+  // FETCHING
   fetchNewTweets = () => {
     window.scrollTo(0, 0);
-    console.log('Fetching tweets from @', this.state.district);
+    console.log('fetching tweets from @', this.state.district);
 
     this.setState({
       visibleTweets: [...this.state.visibleTweets, ...[{text: 'Ålbings, ' + this.state.user + '! 🚓'}]]
     });
     
     fetch('/api/' + this.state.district)
-    .then(res => res.json())
-    .then(tweets => {
-      this.setState({ 
-        allTweets: tweets,
-        loading: false
-      });
+      .then(res => res.json())
+      .then(tweets => {
+        this.setState({ 
+          allTweets: tweets,
+          loading: false
+        });
 
-      this.handleMoreClick();
-      console.log('Done fetching from  @', this.state.district);
-    })
+        this.handleMoreClick();
+        console.log('done fetching from  @', this.state.district);
+      })
+  }
+
+  fetchFavoriteTweets = () => {
+    if (this.state.user) {
+      console.log('fetching ' + this.state.user + 's favorite tweets');
+      fetch('/api/user/' + this.state.user) // API call for collecting users favorite tweets
+        .then(res => res.json())
+        .then(favoriteTweets => {
+          this.setState({
+            favorites: favoriteTweets // make tweets visible
+          });
+          console.log('done fetching ' + this.state.user + 's favorite tweets');
+      })
+    }
   }
 
   // CLICK HANDLERS
   handleMoreClick = () => {
-    const newTweets = this.state.allTweets.slice( // collect tweets to be made visible
+    const newTweets = this.state.allTweets.slice( // collect new tweets to be made visible
       (this.state.page + 1) * 10, 
       ((this.state.page + 1) * 10) + 10
     );
 
-    this.setState(prevState => ({ // make tweets visible
+    this.setState(prevState => ({ // make new tweets visisble
       page: prevState.page + 1,
       visibleTweets: [...this.state.visibleTweets, ...newTweets]
     }));
   }
 
-  handleFavoritesClick = () => {
-    fetch('/api/user/' + this.state.user) // API call for collecting users favorite tweets
-      .then(res => res.json())
-      .then(favoriteTweets => {
-        favoriteTweets.unshift({ // add message to show before tweets
-          text: 'Yessir, her er dine favoritter, ' + this.state.user + '! 👮'});
-        this.setState({
-          visibleTweets: [...this.state.visibleTweets, ...favoriteTweets ] // make tweets visible
-        })
+  toggle = (message) => {
+    this.setState({
+      [message]: !this.state[message]
     })
   }
 
-  handleAboutClick = () => {
-    this.setState({
-      showAbout: !this.state.showAbout
-    });
-  }
-
-  handleLoginClick = () => {
-    this.setState({
-      showLogin: !this.state.showLogin
-    })
-  }
-
+  // COMPONENT CALLBACKS
   getUsername = (username) => {
     this.setState({
       user: username,
       showLogin: false
     });
-  }
-
-  handleDistrictClick = () => {
-    this.setState({
-      showDistricts: !this.state.showDistricts
-    })
   }
 
   getDistrict = (newDistrict) => {
@@ -111,7 +110,7 @@ class App extends Component {
 
   // stupid bind issue hack
   setDistrict = (newDistrict) => {
-    this.setState({
+    this.setState({ // reset state
       district: newDistrict,
       allTweets: [],
       visibleTweets: [],
@@ -119,10 +118,16 @@ class App extends Component {
       loading: true,
       showLogin: false,
       showAbout: false,
-      showDistricts: false
+      showDistricts: false,
+      showNewUser: false,
+      showFavorites: false
     }, () => {
-      this.fetchNewTweets();
+      this.fetchNewTweets(); // get tweets from new district
     });
+  }
+
+  makeNewUser = (username) => {
+    console.log('making new user:', username);
   }
 
 
@@ -136,32 +141,45 @@ class App extends Component {
           
           { (this.state.loading) 
             ? <Loading user={this.state.user}/> 
-            : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} />
+            : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
           }
 
           <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
           
-          { (this.state.user)
-            ? <Message text={"Vis " + this.state.user + " sine favoritter! 😻"} onClick={this.handleFavoritesClick} />
-            : <Message text="La meg logge på! 😻" onClick={this.handleLoginClick} />
-          }
-                    
-          { (this.state.showLogin)
-            ? <Login getUsername={this.getUsername}/>
-            : null
-          }
-
-          <Message text="Bytt politidistrikt! 😼" onClick={this.handleDistrictClick} />
+          <Message text="Bytt politidistrikt! 😼" onClick={()=>{this.toggle('showDistricts')}} />
           { (this.state.showDistricts)
             ? <Districts getDistrict={this.getDistrict}/>
             : null
           }
 
-          <Message text="Hva er dette? 🙀" onClick={this.handleAboutClick} />  
-          { (this.state.showAbout)
-            ? <Tweet text='Dette er politibil.no! 🚓 Her får du politidistriktenes Twitter-meldinger på en enklere og penere måte og greier.'/>
+          { (this.state.user)
+            ? <Message text={"Vis " + this.state.user + " sine favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
+            : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
+          }
+          { (this.state.showFavorites)
+            ? <TweetList tweetList={this.state.favorites} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
             : null
-          }        
+          }
+
+          { (this.state.showLogin)
+            ? <Login getUsername={this.getUsername}/>
+            : null
+          }
+
+          { (this.state.user)
+            ? null
+            : <Message text="La meg lage en bruker! 😻" onClick={()=>{this.toggle('showNewUser')}} />
+          }
+          { (this.state.showNewUser)
+            ? <NewUser makeNewUser={this.makeNewUser}/>
+            : null
+          }
+
+          <Message text="Hva er dette? 🙀" onClick={()=>{this.toggle('showAbout')}} />  
+          { (this.state.showAbout)
+            ? <Tweet text='Dette er politibil.no! 🚓 Her får du politidistriktenes Twitter-meldinger på en enklere og penere måte og sånne ting.'/>
+            : null
+          }
 
         </div>
       </div>

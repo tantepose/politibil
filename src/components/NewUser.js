@@ -1,6 +1,6 @@
 import React from 'react';
 
-class Login extends React.Component {
+class NewUser extends React.Component {
     constructor(props) {
         super(props);
         
@@ -12,7 +12,7 @@ class Login extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
     componentDidMount () {
-        document.getElementById("username-input").focus();
+        document.getElementById("newuser-input").focus();
     }
 
     handleChange(event) {
@@ -21,20 +21,19 @@ class Login extends React.Component {
 
     handleSubmit(event) {
         event.preventDefault();
-        console.log('A name was submitted: ' + this.state.username);
-        this.props.getUsername(this.state.username);
+        this.props.makeNewUser(this.state.username);
     }
   
     render() {
         return (
             <div className="feed">
                 <div className="tweet">
-                    <p>Hva er brukernavnet ditt? 🐱</p>
+                    <p>Hva skal være brukernavnet ditt? 🐱 </p>
                 </div>
 
                 <div className="message">
                     <form onSubmit={this.handleSubmit}>
-                        <input type="text" value={this.state.value} onChange={this.handleChange} id='username-input'/>
+                        <input type="text" value={this.state.value} onChange={this.handleChange} id='newuser-input'/>
                         <input type="submit" value="👍" />
                     </form> 
                 </div>
@@ -43,4 +42,4 @@ class Login extends React.Component {
     }
   }
 
-export default Login;
+export default NewUser;
