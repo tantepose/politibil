@@ -5,7 +5,6 @@ import Tweet from './Tweet';
 
 const Loading = props => (
     <div className="feed">
-        <Tweet text={"Ålbings, " + props.user + "! 🚓"} />
         <div className="tweet">
             <div className = "spinner">
                 <div className = "bounce1"></div>

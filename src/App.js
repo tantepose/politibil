@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 
 import Header from './components/Header';
-import Message from './components/Message';
 import Loading from './components/Loading';
-import Tweet from './components/Tweet';
 import TweetList from './components/TweetList';
+
+import Tweet from './components/Tweet';
+import Message from './components/Message';
+
 import Login from './components/Login';
 import Districts from './components/Districts';
 import NewUser from './components/NewUser';
@@ -45,10 +47,6 @@ class App extends Component {
   fetchNewTweets = () => {
     window.scrollTo(0, 0);
     console.log('fetching tweets from @', this.state.district);
-
-    this.setState({
-      visibleTweets: [...this.state.visibleTweets, ...[{text: 'Ålbings, ' + this.state.user + '! 🚓'}]]
-    });
     
     fetch('/api/' + this.state.district)
       .then(res => res.json())
@@ -138,6 +136,7 @@ class App extends Component {
         <Header />
         <div className="feed">
           <Message text={"Vis meg @" + this.state.district + "! 😺"} />
+          <Tweet text={"Ålbings, " + this.state.user + "! 👮"} />
           
           { (this.state.loading) 
             ? <Loading user={this.state.user}/> 
