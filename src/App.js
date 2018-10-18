@@ -7,6 +7,7 @@ import TweetList from './components/TweetList';
 import Tweet from './components/Tweet';
 import Message from './components/Message';
 
+import GIF from './components/GIF';
 import Login from './components/Login';
 import Districts from './components/Districts';
 import NewUser from './components/NewUser';
@@ -19,7 +20,7 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: 'tantepose',
+      user: null,
 
       favorites: [],
       allTweets: [],
@@ -136,10 +137,12 @@ class App extends Component {
         <Header />
         <div className="feed">
           <Message text={"Vis meg @" + this.state.district + "! 😺"} />
-          <Tweet text={"Ålbings, " + this.state.user + "! 👮"} />
+          
+          <GIF user={this.state.user}/>
+          {/* <Tweet text={"Ålbings, " + this.state.user + "! 👮"} /> */}
           
           { (this.state.loading) 
-            ? <Loading user={this.state.user}/> 
+            ? <Loading /> 
             : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
           }
 
@@ -152,7 +155,7 @@ class App extends Component {
           }
 
           { (this.state.user)
-            ? <Message text={"Vis " + this.state.user + " sine favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
+            ? <Message text={"Vis " + this.state.user + "s favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
             : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
           }
           { (this.state.showFavorites)

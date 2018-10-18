@@ -3,7 +3,7 @@ import Tweet from './Tweet';
 
 // https://codepen.io/clemens/pen/kXZWOK
 
-const Loading = props => (
+const Loading = ()  => (
     <div className="feed">
         <div className="tweet">
             <div className = "spinner">

@@ -57,7 +57,6 @@ function gatherTweets (res, data) {
             .replace('politiet', '👮')
             .replace('politi', '👮')
             
-            
             .replace('ambulansen', '🚑')
             .replace('ambulanse', '🚑')
             
