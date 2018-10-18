@@ -1,5 +1,7 @@
 import React from 'react';
+
 import Loading from './Loading';
+import fail from '../fail.png';
 
 class GIF extends React.Component {
 
@@ -7,7 +9,7 @@ class GIF extends React.Component {
         super(props);
         this.state = {
             gif: '',
-            key: 'ykdiJpS3y6K9u5A2P5awHYeEUO25qgyj',
+            key: 'm0y4OoHIR0xcOc9ZgHdzeOogJ6IhIi6C',
             loading: true,
             sucsess: true
         };
@@ -26,9 +28,8 @@ class GIF extends React.Component {
         .catch(err => {
             console.log('GIF-error: ', err.message);
 
-            // smart solution goes here, for now:
             this.setState({
-                gif: "",
+                gif: fail,
                 loading: false
             })
         })

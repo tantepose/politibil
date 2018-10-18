@@ -7,7 +7,7 @@ const Districts = props => (
             <p>Hvilket politidistrikt vil du følge? 🐱</p>
         </div>
 
-        <div className="message" onClick={() => {props.getDistrict('politietoslo')}}>
+        <div className="message" onClick={() => {props.getDistrict('oslopolitiops')}}>
             <p>Oslo politidistrikt 🌆</p>
         </div>
         <div className="message" onClick={() => {props.getDistrict('PolitiTrondelag')}}>

@@ -61,7 +61,8 @@ header {
 }
 
 .date {
-  font-size: .5em;
+  color: #ddd;
+  font-size: .7em;
   text-align: right;
   margin-top: 15px;
 }

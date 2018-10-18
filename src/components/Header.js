@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from '../police-car-chat.png';
+import logo from '../logo.png';
 
 const Header = () => (
     <header>

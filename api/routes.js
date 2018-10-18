@@ -27,7 +27,7 @@ router.get('/:district', function (req,res,next) { //request, response, next()
             gatherTweets(res, data);
             next();
         } else { //if the request fails
-            console.log('Timeline failed: ' + err.message);
+            console.error('Timeline failed: ' + err.message);
             res.json({
                 error: err.message
             });
@@ -43,7 +43,7 @@ function gatherTweets (res, data) {
     data.forEach(tweet => {
         tweets.push({
             text: tweet.full_text,
-            timestamp: '@' + district + ' ' + moment(tweet.created_at).format('HH:mm, DD/MM/YY')
+            timestamp: '@' + district + ', ' + moment(tweet.created_at).format('HH:mm DD/MM/YYYY')
         });
     });
 
@@ -51,40 +51,79 @@ function gatherTweets (res, data) {
     let emojiTweet;
     tweets.forEach(function (tweet, index, array) {
         emojiTweet = tweet.text
-            .replace(/nødetatene/i, '🚓🚒🚑')
+            .replace(/\bnødetatene\b/gi, '🚓🚒🚑')
             
-            .replace('politibil', '🚓')
-            .replace('politiet', '👮')
-            .replace('politi', '👮')
+            .replace(/\bambulanse\b/gi, '🚑')
+            .replace(/\bambulansen\b/gi, '🚑')
             
-            .replace('ambulansen', '🚑')
-            .replace('ambulanse', '🚑')
-            
-            .replace('melding', '📞')
-            .replace('syklist', '🚲')
-            .replace('pistol', '🔫')
-            
-            .replace('biler', '🚘')
-            .replace('bilen', '🚗')
-            .replace('bil', '🚗')
-            
-            .replace('MC', '🏍️')
-            .replace('motorsykkel', '🏍️')
-            
-            .replace(/brannbilen/gi, '🚒')
-            .replace(/brannbil/gi, '🚒')
+            .replace(/\bpolitibil\b/gi, '🚓')
+            .replace(/\bpolitibilen\b/gi, '🚓')
 
-            .replace('brannvesenet', '🚒')
-            .replace('brann', '🔥')
+            .replace(/\bpoliti\b/gi, '👮')
+            .replace(/\bpolitiet\b/gi, '👮')
+            .replace(/\bvi\b/gi, '👮')
             
-            .replace(/smellet/gi, '💥')
-            .replace(/smell/gi, '💥')
-            
-            .replace(/bussen/gi, '🚌')
-            .replace(/buss/gi, '🚌')
+            .replace(/\bmelding\b/gi, '📞')
 
-            .replace(/fotgjengeren/gi, '🚶')
-            .replace(/fotgjenger/gi, '🚶')
+            .replace(/\bsyklist\b/gi, '🚲')
+            .replace(/\bsyklisten\b/gi, '🚲')
+            
+            .replace(/\bpistol\b/gi, '🔫')
+            .replace(/\bpistolen\b/gi, '🔫')
+
+            .replace(/\bkniv\b/gi, '🔪')
+            .replace(/\bkniven\b/gi, '🔪')
+
+            .replace(/\bnarkotika\b/gi, '💉')
+            .replace(/\bnarkotikaen\b/gi, '💉')
+            .replace(/\bnarko\b/gi, '💉')
+
+            .replace(/\bhund\b/gi, '🐕')
+            .replace(/\bhunden\b/gi, '🐕')
+
+            .replace(/\bkatt\b/gi, '🐈')
+            .replace(/\bkatten\b/gi, '🐈')
+            .replace(/\bkatta\b/gi, '🐈')
+            
+            
+            .replace(/\bbil\b/gi, '🚗')
+            .replace(/\bbilen\b/gi, '🚗')
+            .replace(/\bbiler\b/gi, '🚗')
+            .replace(/\bbilene\b/gi, '🚗')
+            .replace(/\bpersonbil\b/gi, '🚗')
+            
+            .replace(/\blastebil\b/gi, '🚚')
+            .replace(/\blastebilen\b/gi, '🚚')
+            
+            .replace(/\bMC\b/gi, '🏍️')
+            .replace(/\bmotorsykkel\b/gi, '🏍️')
+            .replace(/\bmotorsykkelen\b/gi, '🏍️')
+            
+            .replace(/\bbrannbil\b/gi, '🚒')
+            .replace(/\bbrannbilen\b/gi, '🚒')
+            .replace(/\bbrannvesen\b/gi, '🚒')
+            .replace(/\bbrannvesenet\b/gi, '🚒')
+
+            .replace(/\bbrann\b/gi, '🔥')
+            .replace(/\bbrannen\b/gi, '🔥')
+            
+            .replace(/\bsmell\b/gi, '💥')
+            .replace(/\bsmellet\b/gi, '💥')
+            
+            .replace(/\bbuss\b/gi, '🚌')
+            .replace(/\bbussen\b/gi, '🚌')
+
+            .replace(/\bfotgjenger\b/gi, '🚶')
+            .replace(/\bfotgjengeren\b/gi, '🚶')
+
+            .replace(/\bperson\b/gi, '😐')
+            .replace(/\bpersonen\b/gi, '😐')
+
+            .replace(/\bmann\b/gi, '👨')
+            .replace(/\bmannen\b/gi, '👨')
+
+            .replace(/\bkvinne\b/gi, '👩')
+            .replace(/\bkvinnen\b/gi, '👩')
 
         // get the emojified strings back into the array
         array[index] = {

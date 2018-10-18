@@ -34,6 +34,7 @@ app.post('/api/user/:username', (req, res) => {
     });
 });
 
+// get api/user - gets users favorite tweets
 app.get('/api/user/:username', (req, res) => {
     console.log('henter fra database!');
     db.collection('users').find().toArray(function(err, results) {
