@@ -55,9 +55,17 @@ function gatherTweets (res, data) {
             
             .replace(/\bambulanse\b/gi, '🚑')
             .replace(/\bambulansen\b/gi, '🚑')
+
+            .replace(/\bsykehus\b/gi, '🏥')
+            .replace(/\bsykehuset\b/gi, '🏥')
+            .replace(/\blegevakt\b/gi, '🏥')
+            .replace(/\blegevakten\b/gi, '🏥')
+            .replace(/\blegevakta\b/gi, '🏥')
             
             .replace(/\bpolitibil\b/gi, '🚓')
             .replace(/\bpolitibilen\b/gi, '🚓')
+            .replace(/\bpolitipatrulje\b/gi, '🚓')
+            .replace(/\bpolitipatruljen\b/gi, '🚓')
 
             .replace(/\bpoliti\b/gi, '👮')
             .replace(/\bpolitiet\b/gi, '👮')
@@ -65,8 +73,13 @@ function gatherTweets (res, data) {
             
             .replace(/\bmelding\b/gi, '📞')
 
+            .replace(/\bsykkel\b/gi, '🚲')
+            .replace(/\bsykkelen\b/gi, '🚲')
             .replace(/\bsyklist\b/gi, '🚲')
             .replace(/\bsyklisten\b/gi, '🚲')
+
+            .replace(/\bbåt\b/gi, '🛥️')
+            .replace(/\bbåten\b/gi, '🛥️')
             
             .replace(/\bpistol\b/gi, '🔫')
             .replace(/\bpistolen\b/gi, '🔫')
@@ -91,9 +104,13 @@ function gatherTweets (res, data) {
             .replace(/\bbiler\b/gi, '🚗')
             .replace(/\bbilene\b/gi, '🚗')
             .replace(/\bpersonbil\b/gi, '🚗')
+            .replace(/\bpersonbilen\b/gi, '🚗')
             
             .replace(/\blastebil\b/gi, '🚚')
             .replace(/\blastebilen\b/gi, '🚚')
+            
+            .replace(/\bbuss\b/gi, '🚌')
+            .replace(/\bbussen\b/gi, '🚌')
             
             .replace(/\bMC\b/gi, '🏍️')
             .replace(/\bmotorsykkel\b/gi, '🏍️')
@@ -109,9 +126,6 @@ function gatherTweets (res, data) {
             
             .replace(/\bsmell\b/gi, '💥')
             .replace(/\bsmellet\b/gi, '💥')
-            
-            .replace(/\bbuss\b/gi, '🚌')
-            .replace(/\bbussen\b/gi, '🚌')
 
             .replace(/\bfotgjenger\b/gi, '🚶')
             .replace(/\bfotgjengeren\b/gi, '🚶')
