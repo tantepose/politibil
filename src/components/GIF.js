@@ -39,6 +39,11 @@ class GIF extends React.Component {
     render() {
         return (
             <div className="tweet">
+            { (this.props.user)
+                ? <p>Ålbings, {this.props.user}! 👮</p>
+                : <p>Ålbings! 👮</p>
+            }
+            
                 { (this.state.loading) 
                     ? <Loading />
                     : <img src={this.state.gif} ></img>

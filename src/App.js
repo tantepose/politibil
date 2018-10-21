@@ -20,7 +20,7 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: null,
+      user: 'tante',
 
       favorites: [],
       allTweets: [],
@@ -146,7 +146,11 @@ class App extends Component {
             : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
           }
 
-          <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
+          { (this.state.allTweets.length == this.state.visibleTweets.length)
+            ? <Message text="Ikke flere tweets å vise! 😿" />
+            : <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
+          }
+          
           
           <Message text="Bytt politidistrikt! 😼" onClick={()=>{this.toggle('showDistricts')}} />
           { (this.state.showDistricts)
