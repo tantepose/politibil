@@ -7,13 +7,12 @@ const Twit = require('twit');
 const twitConfig = require('./config.js');
 const T = new Twit(twitConfig);
 
-// global variables
+// global district variable
 let district;
 
 // get api/:district - gets latests tweets from district
-router.get('/:district', function (req,res,next) { //request, response, next()
+router.get('/tweets/:district', function (req,res,next) { //request, response, next()
     district = req.params.district;
-    console.log('getting', district);
 
     T.get('statuses/user_timeline', { 
         screen_name: district, 
@@ -37,7 +36,6 @@ router.get('/:district', function (req,res,next) { //request, response, next()
 });
 
 function gatherTweets (res, data) {
-    console.log('alt:', data);
     // get the tweets in an array in orderly fashion
     let tweets = [];
     data.forEach(tweet => {

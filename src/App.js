@@ -20,9 +20,9 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: 'tante',
+      user: 'elinos',
 
-      favorites: [],
+      favorites: ['Ingen lasta! :('],
       allTweets: [],
       visibleTweets: [],
       
@@ -35,13 +35,12 @@ class App extends Component {
       showNewUser: false,
       showFavorites: false
     }
-
   }
   
   // STARTUP
   componentDidMount() {
+    this.fetchUser();
     this.fetchNewTweets();
-    this.fetchFavoriteTweets();
   }
 
   // FETCHING
@@ -49,7 +48,7 @@ class App extends Component {
     window.scrollTo(0, 0);
     console.log('fetching tweets from @', this.state.district);
     
-    fetch('/api/' + this.state.district)
+    fetch('/api/tweets/' + this.state.district)
       .then(res => res.json())
       .then(tweets => {
         this.setState({ 
@@ -62,16 +61,16 @@ class App extends Component {
       })
   }
 
-  fetchFavoriteTweets = () => {
+  fetchUser = () => {
     if (this.state.user) {
       console.log('fetching ' + this.state.user + 's favorite tweets');
-      fetch('/api/user/' + this.state.user) // API call for collecting users favorite tweets
+      fetch('/api/user/' + this.state.user)
         .then(res => res.json())
-        .then(favoriteTweets => {
+        .then(user => {
           this.setState({
-            favorites: favoriteTweets // make tweets visible
+            district: user[0].district,
+            favorites: user[0].favorites
           });
-          console.log('done fetching ' + this.state.user + 's favorite tweets');
       })
     }
   }
@@ -143,7 +142,7 @@ class App extends Component {
           
           { (this.state.loading) 
             ? <Loading /> 
-            : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
+            : <TweetList tweetList={this.state.visibleTweets} user={this.state.user} fetchFavoriteTweets={this.fetchUser} />
           }
 
           { (this.state.allTweets.length == this.state.visibleTweets.length)
@@ -163,7 +162,7 @@ class App extends Component {
             : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
           }
           { (this.state.showFavorites)
-            ? <TweetList tweetList={this.state.favorites} user={this.state.user} fetchFavoriteTweets={this.fetchFavoriteTweets} />
+            ? <TweetList tweetList={this.state.favorites} user={this.state.user} fetchFavoriteTweets={this.fetchUser} />
             : null
           }
 

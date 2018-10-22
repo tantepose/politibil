@@ -6,16 +6,16 @@ class TweetList extends Component {
     // move this logic to app.js
     handleTweetClick = (text, timestamp) => {
         var data = {text: text, timestamp: timestamp};
-
-        fetch('/api/user/' + this.props.user, {
+        console.log('lagrer favoritt');
+        fetch('/api/user/favorites/' + this.props.user, {
             method: 'POST',
             body: JSON.stringify(data),
             headers:{
                 'Content-Type': 'application/json'
-            }
-            }).then(res => res.json())
+            }})
+            .then(res => res.json())
             .then((response) => {
-                console.log('Success:', JSON.stringify(response));
+                console.log('lagra favoritt!!!');
                 this.props.fetchFavoriteTweets();
             } )
             .catch(error => console.error('Error:', error));
