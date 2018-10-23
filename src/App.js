@@ -20,9 +20,9 @@ class App extends Component {
     
     this.state = {
       district: 'oslopolitiops',
-      user: 'elinos',
+      user: null,
 
-      favorites: ['Ingen lasta! :('],
+      favorites: [],
       allTweets: [],
       visibleTweets: [],
       
@@ -61,9 +61,25 @@ class App extends Component {
       })
   }
 
+  login = (username) => {
+    console.log('logging in', username);
+    this.setState({
+      user: username,
+      showLogin: false
+    }, () => this.fetchUser());
+  }
+
+  logout = () => {
+    console.log('logging out', this.state.user);
+    this.setState({
+      user: null,
+      favorites: []
+    });
+  }
+
   fetchUser = () => {
     if (this.state.user) {
-      console.log('fetching ' + this.state.user + 's favorite tweets');
+      console.log('fetching', this.state.user);
       fetch('/api/user/' + this.state.user)
         .then(res => res.json())
         .then(user => {
@@ -75,7 +91,35 @@ class App extends Component {
     }
   }
 
+  makeNewUser = (username) => {
+    console.log('making new user:', username);
+    fetch('/api/user/new', {
+      method: 'POST',
+      body: JSON.stringify({
+        username: username,
+        district: this.state.district
+      }),
+      headers:{
+          'Content-Type': 'application/json'
+      }})
+      .then(res => res.json())
+      .then((response) => {
+          console.log('lagra favoritt!!!');
+          this.setState({
+            user: username,
+            showNewUser: false
+          });         
+      })
+      .catch(error => console.error('Error:', error));
+  }
+
   // CLICK HANDLERS
+  toggle = (message) => {
+    this.setState({
+      [message]: !this.state[message]
+    })
+  }
+
   handleMoreClick = () => {
     const newTweets = this.state.allTweets.slice( // collect new tweets to be made visible
       (this.state.page + 1) * 10, 
@@ -88,19 +132,7 @@ class App extends Component {
     }));
   }
 
-  toggle = (message) => {
-    this.setState({
-      [message]: !this.state[message]
-    })
-  }
-
   // COMPONENT CALLBACKS
-  getUsername = (username) => {
-    this.setState({
-      user: username,
-      showLogin: false
-    });
-  }
 
   getDistrict = (newDistrict) => {
     this.setDistrict(newDistrict);
@@ -108,26 +140,37 @@ class App extends Component {
 
   // stupid bind issue hack
   setDistrict = (newDistrict) => {
-    this.setState({ // reset state
-      district: newDistrict,
-      allTweets: [],
-      visibleTweets: [],
-      page: -1,
-      loading: true,
-      showLogin: false,
-      showAbout: false,
-      showDistricts: false,
-      showNewUser: false,
-      showFavorites: false
-    }, () => {
-      this.fetchNewTweets(); // get tweets from new district
-    });
-  }
+    console.log('setting new district to', newDistrict);
 
-  makeNewUser = (username) => {
-    console.log('making new user:', username);
+    fetch('/api/user/' + this.state.user, {
+      method: 'POST',
+      body: JSON.stringify({
+        district: newDistrict
+      }),
+      headers:{
+          'Content-Type': 'application/json'
+      }})
+      .then(res => res.json())
+      .then((response) => {
+          console.log('district set to', newDistrict);
+            // reset app
+          this.setState({ 
+            district: newDistrict,
+            allTweets: [],
+            visibleTweets: [],
+            page: -1,
+            loading: true,
+            showLogin: false,
+            showAbout: false,
+            showDistricts: false,
+            showNewUser: false,
+            showFavorites: false
+          }, () => {
+            this.fetchNewTweets(); // get tweets from new district
+          });
+      })
+      .catch(error => console.error('Error:', error));
   }
-
 
   // RENDERER
   render() {
@@ -161,18 +204,17 @@ class App extends Component {
             ? <Message text={"Vis " + this.state.user + "s favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
             : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
           }
-          { (this.state.showFavorites)
+          { (this.state.showFavorites && this.state.favorites.length != 0)
             ? <TweetList tweetList={this.state.favorites} user={this.state.user} fetchFavoriteTweets={this.fetchUser} />
             : null
           }
-
           { (this.state.showLogin)
-            ? <Login getUsername={this.getUsername}/>
+            ? <Login login={this.login}/>
             : null
           }
 
           { (this.state.user)
-            ? null
+            ? <Message text="Logg meg av! 🙀" onClick={this.logout} />
             : <Message text="La meg lage en bruker! 😻" onClick={()=>{this.toggle('showNewUser')}} />
           }
           { (this.state.showNewUser)

@@ -5,12 +5,17 @@ class TweetList extends Component {
 
     // move this logic to app.js
     handleTweetClick = (text, timestamp) => {
-        var data = {text: text, timestamp: timestamp};
+        var data = {
+            text: text, 
+            timestamp: timestamp
+        };
+
         console.log('lagrer favoritt');
+        
         fetch('/api/user/favorites/' + this.props.user, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers:{
+            headers: {
                 'Content-Type': 'application/json'
             }})
             .then(res => res.json())

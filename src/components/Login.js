@@ -16,13 +16,15 @@ class Login extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({username: event.target.value});
+        this.setState({
+            username: event.target.value
+        });
     }
 
     handleSubmit(event) {
         event.preventDefault();
         console.log('A name was submitted: ' + this.state.username);
-        this.props.getUsername(this.state.username);
+        this.props.login(this.state.username);
     }
   
     render() {
