@@ -1,5 +1,6 @@
 import React from 'react';
 
+// "make a new user"-component
 class NewUser extends React.Component {
     constructor(props) {
         super(props);
@@ -16,7 +17,9 @@ class NewUser extends React.Component {
     }
 
     handleChange(event) {
-        this.setState({username: event.target.value});
+        this.setState({
+            username: event.target.value
+        });
     }
 
     handleSubmit(event) {

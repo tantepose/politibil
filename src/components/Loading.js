@@ -1,8 +1,7 @@
 import React from 'react';
 import Tweet from './Tweet';
 
-// https://codepen.io/clemens/pen/kXZWOK
-
+// simple loading animation, stolen from https://codepen.io/clemens/pen/kXZWOK
 const Loading = ()  => (
     <div className="feed">
         <div className="tweet">

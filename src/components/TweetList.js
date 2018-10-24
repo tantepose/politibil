@@ -1,29 +1,31 @@
 import React, { Component } from 'react';
 import Tweet from './Tweet';
 
+// displaying a list of <Tweet /> components
 class TweetList extends Component {
 
-    // move this logic to app.js
+    // saving a tweet as favorite on click, if a user is logged in
     handleTweetClick = (text, timestamp) => {
-        var data = {
-            text: text, 
-            timestamp: timestamp
-        };
+        if (this.props.user) { 
+            var data = { // preparing tweet for saving
+                text: text, 
+                timestamp: timestamp
+            };
 
-        console.log('lagrer favoritt');
-        
-        fetch('/api/user/favorites/' + this.props.user, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }})
-            .then(res => res.json())
-            .then((response) => {
-                console.log('lagra favoritt!!!');
-                this.props.fetchFavoriteTweets();
-            } )
-            .catch(error => console.error('Error:', error));
+            console.log('lagrer favoritt');
+            fetch('/api/user/favorites/' + this.props.user, { // saving tweet on user in database
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }})
+                .then(res => res.json())
+                .then((response) => {
+                    console.log('lagra favoritt!!!');
+                    this.props.fetchFavorites(); // fetch updated list of favorites
+                } )
+                .catch(error => console.error('Error:', error));
+        }
     }
 
     render () {

@@ -1,6 +1,9 @@
 import React from 'react';
 
+// "log in"-component
 class Login extends React.Component {
+
+    // state needed to get user input
     constructor(props) {
         super(props);
         
@@ -11,6 +14,8 @@ class Login extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+
+    // getting text from text input
     componentDidMount () {
         document.getElementById("username-input").focus();
     }
@@ -21,10 +26,11 @@ class Login extends React.Component {
         });
     }
 
+    // event fired on enter or OK click
     handleSubmit(event) {
         event.preventDefault();
         console.log('A name was submitted: ' + this.state.username);
-        this.props.login(this.state.username);
+        this.props.login(this.state.username); // send input data to login-function in App.js
     }
   
     render() {

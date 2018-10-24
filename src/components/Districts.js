@@ -1,5 +1,6 @@
 import React from 'react';
 
+// listing of districts, calling getDistrict with corresponding @Twitter-handle
 const Districts = props => (
     <div className="feed">
 
