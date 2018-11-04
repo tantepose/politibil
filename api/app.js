@@ -66,12 +66,22 @@ app.post('/api/user/:username', (req, res) => {
     )
 });
 
-// get all user data
+// get user from username
 app.get('/api/user/:username', (req, res) => {
     console.log('GETTING USER:', req.params.username);
     db.collection('users').find({ 
         username: req.params.username 
     })
+    .toArray(function(err, result) {
+        if (err) return console.log(err)
+        res.json(result);
+    });
+});
+
+// get all users 
+app.get('/api/user/', (req, res) => {
+    console.log('GETTING ALL USERS');
+    db.collection('users').find()
     .toArray(function(err, result) {
         if (err) return console.log(err)
         res.json(result);
