@@ -55,8 +55,7 @@ app.post('/api/user/favorites/:username', (req, res) => {
 
 // set district
 app.post('/api/user/:username', (req, res) => {
-    db.collection('users').updateOne(
-        { username: req.params.username },
+    db.collection('users').updateOne({ username: req.params.username },
         { $set: { district: req.body.district } }, 
         (err, result) => {
             if (err) return console.log(err)
@@ -69,10 +68,12 @@ app.post('/api/user/:username', (req, res) => {
 
 // get all user data
 app.get('/api/user/:username', (req, res) => {
-    db.collection('users')
-        .find({ username: req.params.username })
-        .toArray(function(err, result) {
-            if (err) return console.log(err)
-            res.json(result);
-        });
+    console.log('GETTING USER:', req.params.username);
+    db.collection('users').find({ 
+        username: req.params.username 
+    })
+    .toArray(function(err, result) {
+        if (err) return console.log(err)
+        res.json(result);
+    });
 });

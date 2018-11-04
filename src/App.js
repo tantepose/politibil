@@ -33,7 +33,9 @@ class App extends Component {
       showAbout: false,
       showDistricts: false,
       showNewUser: false,
-      showFavorites: false
+      showFavorites: false,
+
+      feedback: ""
     }
   }
   
@@ -47,19 +49,35 @@ class App extends Component {
     }
   }
 
-  // first login - fetch user and update state
+  // login - fetch user and update state
   login = (username) => {
     console.log('logging in and fetching', username);
+
       fetch('/api/user/' + username)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) { // no database connection
+            this.setState({
+              feedback: 'Finner ikke database! 😿'
+            });
+          } else { // database online
+            return res.json();
+          }
+        })
         .then(user => {
-          this.setState({
-            user: username,
-            showLogin: false,
-            district: user[0].district,
-            favorites: user[0].favorites
-          }, () => this.fetchNewTweets());
-      })
+          if (user.length == 0) { // user not found
+            this.setState({
+              feedback: 'Finner ikke ' + username + '! 😿'
+            });
+          } else { // user found, logging in
+            this.setState({
+              user: username,
+              showLogin: false,
+              district: user[0].district,
+              favorites: user[0].favorites,
+              feedback: ''
+            }, () => this.fetchNewTweets());
+          }
+        })
   }
 
   // fetching a new set of tweets from @district
@@ -107,21 +125,35 @@ class App extends Component {
   // create new user in database
   makeNewUser = (username) => {
     console.log('making new user:', username);
-    fetch('/api/user/new', {
-      method: 'POST',
-      body: JSON.stringify({
-        username: username,
-        district: this.state.district
-      }),
-      headers:{
-          'Content-Type': 'application/json'
-      }})
+
+    fetch('/api/user/' + username)
       .then(res => res.json())
-      .then((response) => {
-        this.login(username);
-        console.log('made user', username);
+      .then(user => {
+        if (user.length > 0) { // username allready taken
+          this.setState({
+            feedback: 'Navnet ' + username + ' er allerede tatt! 😿'
+          })
+        } else { // username available, make new user
+          fetch('/api/user/new', {
+            method: 'POST',
+            body: JSON.stringify({
+              username: username,
+              district: this.state.district
+            }),
+            headers:{
+                'Content-Type': 'application/json'
+            }})
+            .then(res => res.json())
+            .then((response) => {
+              this.login(username); // log in new user
+              this.setState({
+                feedback: ''
+              });
+              console.log('made user', username);
+            })
+            .catch(error => console.error('Error:', error));
+        }
       })
-      .catch(error => console.error('Error:', error));
   }
 
   // log out current user
@@ -221,7 +253,7 @@ class App extends Component {
             : null
           }
           { (this.state.showLogin)
-            ? <Login login={this.login}/>
+            ? <Login login={this.login} feedback={this.state.feedback}/>
             : null
           }
 
@@ -231,14 +263,14 @@ class App extends Component {
             : <Message text="La meg lage en bruker! 😹" onClick={()=>{this.toggle('showNewUser')}} />
           }
           { (this.state.showNewUser)
-            ? <NewUser makeNewUser={this.makeNewUser}/>
+            ? <NewUser makeNewUser={this.makeNewUser} feedback={this.state.feedback}/>
             : null
           }
 
           {/* --- show about --- */}
           <Message text="Hva er dette? 🐱" onClick={()=>{this.toggle('showAbout')}} />  
           { (this.state.showAbout)
-            ? <Tweet text="Politibil.no lar deg følge med på politibilene i nærområdet ditt! 🚓 Lag en bruker for å lagre politidistrikt, og få muligheten til å lagre favoritter ved å trykke på meldinger. 💘 " />
+            ? <Tweet text="Politibil.no lar deg følge politibilene i nabolaget ditt! 🚓 Lag en bruker for å lagre politidistrikt, og få muligheten til å lagre favoritter ved å trykke på meldinger. 💘 " />
             : null
           }
         </div>

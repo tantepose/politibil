@@ -45,6 +45,7 @@ class Login extends React.Component {
                         <input type="text" value={this.state.value} onChange={this.handleChange} id='username-input'/>
                         <input type="submit" value="👍" />
                     </form> 
+                    <p><i>{this.props.feedback}</i></p>
                 </div>
             </div>
       );

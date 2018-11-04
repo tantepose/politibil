@@ -39,6 +39,7 @@ class NewUser extends React.Component {
                         <input type="text" value={this.state.value} onChange={this.handleChange} id='newuser-input'/>
                         <input type="submit" value="👍" />
                     </form> 
+                    <p><i>{this.props.feedback}</i></p>
                 </div>
             </div>
       );
