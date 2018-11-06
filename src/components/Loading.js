@@ -1,5 +1,4 @@
 import React from 'react';
-import Tweet from './Tweet';
 
 // simple loading animation, stolen from https://codepen.io/clemens/pen/kXZWOK
 const Loading = ()  => (

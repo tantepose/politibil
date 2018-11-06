@@ -7,7 +7,7 @@ import TweetList from './components/TweetList';
 import Tweet from './components/Tweet';
 import Message from './components/Message';
 
-import GIF from './components/GIF';
+import Greeting from './components/Greeting';
 import Login from './components/Login';
 import Districts from './components/Districts';
 import NewUser from './components/NewUser';
@@ -222,7 +222,7 @@ class App extends Component {
         <div className="feed">
           {/* --- intro messages --- */}
           <Message text={"Vis meg @" + this.state.district + "! 😺"} />
-          <GIF user={this.state.user}/>
+          <Greeting user={this.state.user}/>
           
           {/* --- main tweet stream --- */}
           { (this.state.loading) 
@@ -236,16 +236,9 @@ class App extends Component {
             : <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
           }
           
-          {/* --- setting district --- */}
-          <Message text="Bytt politidistrikt! 😼" onClick={()=>{this.toggle('showDistricts')}} />
-          { (this.state.showDistricts)
-            ? <Districts getDistrict={this.getDistrict}/>
-            : null
-          }
-
           {/* --- show favorites / log in --- */}
           { (this.state.user)
-            ? <Message text={"Vis " + this.state.user + "s favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
+            ? <Message text={"Vis mine favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
             : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
           }
           { (this.state.showFavorites && this.state.favorites.length != 0)
@@ -254,6 +247,13 @@ class App extends Component {
           }
           { (this.state.showLogin)
             ? <Login login={this.login} feedback={this.state.feedback}/>
+            : null
+          }
+
+          {/* --- setting district --- */}
+          <Message text="Bytt politidistrikt! 😼" onClick={()=>{this.toggle('showDistricts')}} />
+          { (this.state.showDistricts)
+            ? <Districts getDistrict={this.getDistrict}/>
             : null
           }
 
@@ -270,7 +270,7 @@ class App extends Component {
           {/* --- show about --- */}
           <Message text="Hva er dette? 🐱" onClick={()=>{this.toggle('showAbout')}} />  
           { (this.state.showAbout)
-            ? <Tweet text="Politibil.no lar deg følge politibilene i nabolaget ditt! 🚓 Lag en bruker for å lagre politidistrikt, og få muligheten til å lagre favoritter ved å trykke på meldinger. 💘 " />
+            ? <Tweet text="Politibil.no lar deg følge politibilene i nabolaget ditt! 🚓 Lag en bruker for å lagre politidistrikt, og få muligheten til å lagre favoritter ved å trykke på meldinger. 💘 Ole Petter" />
             : null
           }
         </div>

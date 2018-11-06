@@ -4,7 +4,7 @@ import Loading from './Loading';
 import fail from '../fail.gif';
 
 // welcome message containing GIF from giphy.com API
-class GIF extends React.Component {
+class Greeting extends React.Component {
 
     // setting initial state
     constructor(props) {
@@ -37,7 +37,7 @@ class GIF extends React.Component {
             })
     }
 
-    // render message with GIF
+    // render greeting with GIF
     render() {
         return (
             <div className="tweet">
@@ -48,11 +48,11 @@ class GIF extends React.Component {
                 
                 { (this.state.loading) 
                     ? <Loading />
-                    : <img src={this.state.gif} ></img>
+                    : <img src={this.state.gif} className="gif" ></img>
                 }
             </div>
       );
     }
   }
 
-export default GIF;
+export default Greeting;

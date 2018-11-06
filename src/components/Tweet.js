@@ -14,10 +14,11 @@ class Tweet extends React.Component {
     
     render() {
         return (
-            <div className = "tweet" onClick={
-                () => { 
-                    this.props.onClick(this.props.text, this.props.timestamp);
-                    this.setState({favorite: true});
+            <div className = "tweet" onClick={ () => { 
+                    if (this.props.user) {
+                        this.props.onClick(this.props.text, this.props.timestamp);
+                        this.setState({favorite: true});
+                    }
                 }}
             >
 
