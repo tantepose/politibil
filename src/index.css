@@ -1,3 +1,5 @@
+/* MAIN */
+
 body {
   margin: 0;
   padding: 0;
@@ -36,6 +38,8 @@ header {
   flex-flow: column;
   margin-bottom: 50px;
 }
+
+/* TWEETS / MESSAGES */
 
 .tweetList {
   display: flex;
@@ -123,7 +127,7 @@ input[type=submit] {
 }
 
 
-/* ANIMASJON YO */
+/* HEADER ANIMATION */
 
 header img {
   width: 60%;
@@ -179,6 +183,8 @@ header img {
   90% { -webkit-transform: translate(2px, 2px) rotate(0deg); }
   100% { -webkit-transform: translate(1px, -2px) rotate(-1deg); }
 }
+
+/* SPINNER ANIMATION */
 
 .spinner {
   margin: 0;
