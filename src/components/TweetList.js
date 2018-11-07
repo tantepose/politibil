@@ -30,12 +30,13 @@ class TweetList extends Component {
         return (
             <div className='tweetList'>
                 {this.props.tweetList.map((tweet, key) =>
-                <Tweet 
-                    text={tweet.text} 
-                    timestamp={tweet.timestamp} 
-                    key={key}
-                    user={this.props.user}
-                    onClick={this.handleTweetClick} />
+                    <Tweet 
+                        text={tweet.text} 
+                        timestamp={tweet.timestamp} 
+                        key={key}
+                        user={this.props.user}
+                        onClick={this.handleTweetClick} 
+                    />
                 )}
             </div>
         );
