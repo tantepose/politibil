@@ -1,4 +1,4 @@
-//secret keys to authenticate Twit
+// super secret keys to authenticate Twit
 module.exports = {
     consumer_key: 'qxXbQSM0Pd6o04xC2NgPxw4oU',
     consumer_secret: 'g5xDFaXg94vqyUOLYRpMm0ClhbRIZckDtGDCC9lmXBd07Gkrcl',
