@@ -7,7 +7,7 @@ const express = require('express');
 const app = express();
 const moment = require('moment');
 
-//set up Twit (using ./config.js for credencials)
+// set up Twit (using ./config.js for credencials)
 const Twit = require('twit');
 const twitConfig = require('./config.js');
 const T = new Twit(twitConfig);
