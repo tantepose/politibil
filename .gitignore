@@ -21,5 +21,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# custom ignores
-/api/config.js
+# ignore credentials
+api/twitter-config.js
+api/mlab-config.js

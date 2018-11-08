@@ -9,13 +9,14 @@ const moment = require('moment');
 
 // set up Twit (using ./config.js for credencials)
 const Twit = require('twit');
-const twitConfig = require('./config.js');
+const twitConfig = require('./twitter-config.js');
 const T = new Twit(twitConfig);
 
 // connect to database
+const mlab_config = require('./mlab-config.js');
 const MongoClient = require('mongodb').MongoClient;
 var db;
-MongoClient.connect('mongodb://politibil:tuttut69@ds223253.mlab.com:23253/politibil', 
+MongoClient.connect(mlab_config.mlab_uri, 
     { useNewUrlParser: true }, 
     (err, client) => {
         if (err) return console.log(err);
