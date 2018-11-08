@@ -20,7 +20,7 @@ MongoClient.connect(mlab_config.mlab_uri,
     { useNewUrlParser: true }, 
     (err, client) => {
         if (err) return console.log(err);
-        db = client.db('politibil');
+        db = client.db('politibil2');
         console.log('mongoLab database connected!');
     }
 );
