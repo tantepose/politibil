@@ -1,18 +1,16 @@
-// politibil.no backend
-// * tweet fetching & styling
-// * database reading & writing
+// SERVER SETUP
 
 // general requirements
 const express = require('express');
 const app = express();
 const moment = require('moment');
 
-// set up Twit (using ./config.js for credencials)
+// set up Twit (using ./twitter-config.js for credencials)
 const Twit = require('twit');
 const twitConfig = require('./twitter-config.js');
 const T = new Twit(twitConfig);
 
-// connect to database
+// connect to database (using ./mlab-config.js for credencials)
 const mlab_config = require('./mlab-config.js');
 const MongoClient = require('mongodb').MongoClient;
 var db;
@@ -36,6 +34,7 @@ app.listen(port);
 console.log('Server listening! On port', port);
 
 // ROUTES
+
 // get and style latests tweets from district
 app.get('/api/tweets/:district', function (req,res) {
     console.log('fetching tweets from:', req.params.district);
@@ -117,6 +116,8 @@ app.get('/api/user/', (req, res) => {
         res.json(result);
     });
 });
+
+// MISC
 
 // format and emojify tweets
 function styledTweets (data, district) {
