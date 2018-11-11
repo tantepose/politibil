@@ -51,8 +51,6 @@ class App extends Component {
 
   // login - fetch user and update state
   login = (username) => {
-    console.log('logging in and fetching', username);
-
       fetch('/api/user/' + username)
         .then(res => {
           if (!res.ok) { // no database connection
@@ -78,12 +76,12 @@ class App extends Component {
             }, () => this.fetchNewTweets());
           }
         })
+        .catch(error => console.error('Error loggin in:', error));
   }
 
   // fetching a new set of tweets from @district
   fetchNewTweets = () => {
     window.scrollTo(0, 0);
-    console.log('fetching tweets from @', this.state.district);
     
     this.setState({ // reset state
       visibleTweets: [],
@@ -106,26 +104,24 @@ class App extends Component {
           loading: false
         });
         this.handleMoreClick(); // set pagination from -1 to 0
-        console.log('done fetching from  @', this.state.district);
       })
+      .catch(error => console.error('Error fetching tweets:', error));
   }
 
   // fetching favorites from logged in user
   fetchFavorites = () => {
-      console.log('fetching favorites from', this.state.user);
       fetch('/api/user/' + this.state.user)
         .then(res => res.json())
         .then(user => {
           this.setState({
             favorites: user[0].favorites
           });
-      })
+        })
+        .catch(error => console.error('Error fetching favorites:', error));
   }
 
   // create new user in database
   makeNewUser = (username) => {
-    console.log('making new user:', username);
-
     fetch('/api/user/' + username)
       .then(res => res.json())
       .then(user => {
@@ -149,16 +145,14 @@ class App extends Component {
               this.setState({
                 feedback: ''
               });
-              console.log('made user', username);
             })
-            .catch(error => console.error('Error:', error));
         }
       })
+      .catch(error => console.error('Error creating user:', error));
   }
 
   // log out current user
   logout = () => {
-    console.log('logging out', this.state.user);
     this.setState({
       user: null,
       favorites: []
@@ -187,12 +181,10 @@ class App extends Component {
 
   // setting a new district
   getDistrict = (newDistrict) => {
-    this.setDistrict(newDistrict);
+    this.setDistrict(newDistrict); // stupid bind issue hack
   }
   
-  setDistrict = (newDistrict) => { // stupid bind issue hack
-    console.log('setting new district to', newDistrict);
-
+  setDistrict = (newDistrict) => { 
     fetch('/api/user/' + this.state.user, { // save district on user in database
       method: 'POST',
       body: JSON.stringify({
@@ -206,11 +198,10 @@ class App extends Component {
         this.setState({
           district: newDistrict // make selected district active
         }, () => {
-          console.log('district set to ' + newDistrict + ', moving to tweet fetch');
           this.fetchNewTweets(); // fetch selected districts tweets
         })  
       })
-      .catch(error => console.error('Error:', error));
+      .catch(error => console.error('Error setting new district:', error));
   }
 
   // rendering

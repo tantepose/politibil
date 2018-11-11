@@ -11,7 +11,6 @@ class TweetList extends Component {
             timestamp: timestamp
         };
 
-        console.log('lagrer favoritt');
         fetch('/api/user/favorites/' + this.props.user, { // saving tweet on user in database
             method: 'POST',
             body: JSON.stringify(data),
@@ -20,10 +19,9 @@ class TweetList extends Component {
             }})
             .then(res => res.json())
             .then((response) => {
-                console.log('lagra favoritt!!!');
                 this.props.fetchFavorites(); // fetch updated list of favorites
             } )
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error saving favorite:', error));
     }
 
     render () {
