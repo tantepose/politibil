@@ -1,7 +1,9 @@
 import React from 'react';
-
 import Loading from './Loading';
 import fail from '../fail.gif';
+
+// disabling emoji warnings from create-react-app
+/* eslint-disable jsx-a11y/accessible-emoji */
 
 // welcome message containing GIF from giphy.com API
 class Greeting extends React.Component {
@@ -48,7 +50,7 @@ class Greeting extends React.Component {
                 
                 { (this.state.loading) 
                     ? <Loading />
-                    : <img src={this.state.gif} className="gif" ></img>
+                    : <img src={this.state.gif} className="gif" alt="police GIF"></img>
                 }
             </div>
       );

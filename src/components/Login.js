@@ -1,5 +1,8 @@
 import React from 'react';
 
+// disabling emoji warnings from create-react-app
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 // "log in"-component
 class Login extends React.Component {
 

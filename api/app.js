@@ -1,4 +1,23 @@
-// SERVER SETUP
+/* 
+the express backend of politibil.no 
+    by Ole Petter Baugerød Stokke
+
+features:
+    * fetching tweets using Twit
+    * emojifying tweets using my own .replace bonanza
+    * reading and writing to a mlab database using MongoDB driver for Node.js 
+*/
+
+/***
+ *               _               
+ *              | |              
+ *      ___  ___| |_ _   _ _ __  
+ *     / __|/ _ \ __| | | | '_ \ 
+ *     \__ \  __/ |_| |_| | |_) |
+ *     |___/\___|\__|\__,_| .__/ 
+ *                        | |    
+ *                        |_|    
+ */
 
 // general requirements
 const express = require('express');
@@ -9,6 +28,7 @@ const moment = require('moment');
 const Twit = require('twit');
 const twitConfig = require('./twitter-config.js');
 const T = new Twit(twitConfig);
+console.log('Twitter configured!');
 
 // connect to database (using ./mlab-config.js for credencials)
 const mlab_config = require('./mlab-config.js');
@@ -33,7 +53,16 @@ const port = process.env.PORT || 5000;
 app.listen(port);
 console.log('Server listening! On port', port);
 
-// ROUTES
+/***
+ *                      _            
+ *                     | |           
+ *      _ __ ___  _   _| |_ ___  ___ 
+ *     | '__/ _ \| | | | __/ _ \/ __|
+ *     | | | (_) | |_| | ||  __/\__ \
+ *     |_|  \___/ \__,_|\__\___||___/
+ *                                   
+ *                                   
+ */
 
 // get and style latests tweets from district
 app.get('/api/tweets/:district', function (req,res) {
@@ -117,7 +146,16 @@ app.get('/api/user/', (req, res) => {
     });
 });
 
-// MISC
+/***
+ *                _          
+ *               (_)         
+ *      _ __ ___  _ ___  ___ 
+ *     | '_ ` _ \| / __|/ __|
+ *     | | | | | | \__ \ (__ 
+ *     |_| |_| |_|_|___/\___|
+ *                           
+ *                           
+ */
 
 // format and emojify tweets
 function styledTweets (data, district) {

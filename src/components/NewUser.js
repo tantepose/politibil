@@ -1,5 +1,8 @@
 import React from 'react';
 
+// disabling emoji warnings from create-react-app
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 // "make a new user"-component
 class NewUser extends React.Component {
     constructor(props) {

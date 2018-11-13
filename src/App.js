@@ -1,26 +1,27 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookies'
 
 import Header from './components/Header';
 import Loading from './components/Loading';
 import TweetList from './components/TweetList';
-
 import Tweet from './components/Tweet';
 import Message from './components/Message';
-
 import Greeting from './components/Greeting';
 import Login from './components/Login';
 import Districts from './components/Districts';
 import NewUser from './components/NewUser';
 
+/* eslint-disable jsx-a11y/accessible-emoji */
+
 class App extends Component {
-  
+
   // setting default state
-  constructor() {
+  constructor(props) {
     super(); 
     
     this.state = {
-      district: 'oslopolitiops',
-      user: null,
+      district: cookie.load('district') || 'oslopolitiops',
+      user: cookie.load('user') || null,
 
       favorites: [],
       allTweets: [],
@@ -39,56 +40,59 @@ class App extends Component {
     }
   }
   
-  // on initial startup
-  componentDidMount() {
-    if (this.state.user) {
-      this.login();
-    }
-    else {
+  // log in if user allready saved in cookie
+  componentWillMount () {
+    const cookieUser = cookie.load('user');
+
+    if (cookieUser) {
+      this.login(cookieUser);
+    } else {
       this.fetchNewTweets();
     }
   }
 
-  // login - fetch user and update state
+  // log in - fetch user and update state
   login = (username) => {
       fetch('/api/user/' + username)
         .then(res => {
           if (!res.ok) { // no database connection
             this.setState({
-              feedback: 'Finner ikke database! 😿'
+              feedback: 'Ingen kontakt med database! 😿'
             });
-          } else { // database online
+          } else {
             return res.json();
           }
         })
         .then(user => {
-          if (user.length == 0) { // user not found
+          if (user.length === 0) { // user not found
             this.setState({
               feedback: 'Finner ikke ' + username + '! 😿'
             });
-          } else { // user found, logging in
+          } else {
             this.setState({
               user: username,
               showLogin: false,
               district: user[0].district,
               favorites: user[0].favorites,
               feedback: ''
-            }, () => this.fetchNewTweets());
+            }, () => {
+              this.fetchNewTweets();
+              cookie.save('user', this.state.user, { path: '/' });
+              cookie.save('district', this.state.district, { path: '/' });
+            });
           }
         })
         .catch(error => console.error('Error loggin in:', error));
   }
 
-  // fetching a new set of tweets from @district
+  // fetching new set of tweets from @district
   fetchNewTweets = () => {
     window.scrollTo(0, 0);
     
     this.setState({ // reset state
       visibleTweets: [],
       page: -1,
-
       loading: true,
-
       showLogin: false,
       showAbout: false,
       showDistricts: false,
@@ -96,14 +100,14 @@ class App extends Component {
       showFavorites: false
     });
 
-    fetch('/api/tweets/' + this.state.district) // fetching new tweets
+    fetch('/api/tweets/' + this.state.district) // fetch tweets
       .then(res => res.json())
       .then(tweets => {
         this.setState({ 
           allTweets: tweets,
           loading: false
         });
-        this.handleMoreClick(); // set pagination from -1 to 0
+        this.handleMoreClick(); // get page 0 (first page)
       })
       .catch(error => console.error('Error fetching tweets:', error));
   }
@@ -122,14 +126,14 @@ class App extends Component {
 
   // create new user in database
   makeNewUser = (username) => {
-    fetch('/api/user/' + username)
+    fetch('/api/user/' + username) // username taken?
       .then(res => res.json())
       .then(user => {
-        if (user.length > 0) { // username allready taken
+        if (user.length > 0) { // yes, print error
           this.setState({
             feedback: 'Navnet ' + username + ' er allerede tatt! 😿'
           })
-        } else { // username available, make new user
+        } else { // no, make new user
           fetch('/api/user/new', {
             method: 'POST',
             body: JSON.stringify({
@@ -140,8 +144,8 @@ class App extends Component {
                 'Content-Type': 'application/json'
             }})
             .then(res => res.json())
-            .then((response) => {
-              this.login(username); // log in new user
+            .then((response) => { // log in new user
+              this.login(username);
               this.setState({
                 feedback: ''
               });
@@ -157,51 +161,52 @@ class App extends Component {
       user: null,
       favorites: []
     });
+
+    cookie.remove('user', { path: '/' });
   }
 
   // displaying or hiding a message
   toggle = (message) => {
     this.setState({
-      [message]: !this.state[message] // invert 'showXXX' property
+      [message]: !this.state[message] // invert 'show[Message]' property
     })
   }
 
   // clicking show more-button (pagination)
   handleMoreClick = () => {
-    const newTweets = this.state.allTweets.slice( // get additional tweets to show
-      (this.state.page + 1) * 10, 
-      ((this.state.page + 1) * 10) + 10
+    const newTweets = this.state.allTweets.slice( // get next tweets to show...
+      (this.state.page + 1) * 10, // ...by slicing from last visible tweet in list...
+      ((this.state.page + 1) * 10) + 10 // ...to the next 10
     );
 
-    this.setState(prevState => ({ // show the additional tweets
+    this.setState(prevState => ({
       page: prevState.page + 1,
-      visibleTweets: [...this.state.visibleTweets, ...newTweets]
+      visibleTweets: [...this.state.visibleTweets, ...newTweets] // add next tweets to list
     }));
   }
 
-  // setting a new district
-  getDistrict = (newDistrict) => {
-    this.setDistrict(newDistrict); // stupid bind issue hack
-  }
-  
-  setDistrict = (newDistrict) => { 
-    fetch('/api/user/' + this.state.user, { // save district on user in database
-      method: 'POST',
-      body: JSON.stringify({
-        district: newDistrict
-      }),
-      headers:{
-          'Content-Type': 'application/json'
-      }})
-      .then(res => res.json())
-      .then((response) => {
-        this.setState({
-          district: newDistrict // make selected district active
-        }, () => {
-          this.fetchNewTweets(); // fetch selected districts tweets
-        })  
+  // setting and fetching a new district
+  setDistrict = (newDistrict) => {
+    this.setState({
+      district: newDistrict
+    }, () => {
+      this.fetchNewTweets();
+      cookie.save('district', this.state.district, { path: '/' });
+    });
+
+    // saving new district if user is logged in
+    if (this.state.user) {
+      fetch('/api/user/' + this.state.user, {
+        method: 'POST',
+        body: JSON.stringify({
+          district: newDistrict
+        }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
       })
       .catch(error => console.error('Error setting new district:', error));
+    }
   }
 
   // rendering
@@ -222,7 +227,7 @@ class App extends Component {
           }
 
           {/* --- pagination --- */}
-          { (this.state.allTweets.length == this.state.visibleTweets.length)
+          { (this.state.allTweets.length === this.state.visibleTweets.length)
             ? <Message text="Ikke flere tweets å vise! 😿" />
             : <Message text="Gi meg mer! 😽" onClick={this.handleMoreClick} />
           }
@@ -232,7 +237,7 @@ class App extends Component {
             ? <Message text={"Vis mine favoritter! 😻"} onClick={()=>{this.toggle('showFavorites')}} />
             : <Message text="La meg logge på! 😻" onClick={()=>{this.toggle('showLogin')}} />
           }
-          { (this.state.showFavorites && this.state.favorites.length != 0)
+          { (this.state.showFavorites && this.state.favorites.length !== 0)
             ? <TweetList tweetList={this.state.favorites} user={this.state.user} fetchFavorites={this.fetchFavorites} />
             : null
           }
@@ -244,7 +249,7 @@ class App extends Component {
           {/* --- setting district --- */}
           <Message text="Bytt politidistrikt! 😼" onClick={()=>{this.toggle('showDistricts')}} />
           { (this.state.showDistricts)
-            ? <Districts getDistrict={this.getDistrict}/>
+            ? <Districts setDistrict={this.setDistrict}/>
             : null
           }
 
