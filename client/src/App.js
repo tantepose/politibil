@@ -118,7 +118,7 @@ class App extends Component {
         .then(res => res.json())
         .then(user => {
           this.setState({
-            favorites: user[0].favorites
+            favorites: user[0].favorites.reverse() // reverse() for latests favorites first
           });
         })
         .catch(error => console.error('Error fetching favorites:', error));
@@ -126,7 +126,7 @@ class App extends Component {
 
   // create new user in database
   makeNewUser = (username) => {
-    fetch('/api/user/' + username) // username taken?
+    fetch('/api/user/' + username) // username allready claimed?
       .then(res => res.json())
       .then(user => {
         if (user.length > 0) { // yes, print error

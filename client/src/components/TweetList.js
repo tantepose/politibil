@@ -5,7 +5,7 @@ import Tweet from './Tweet';
 class TweetList extends Component {
 
     // saving a tweet as favorite on click
-    handleTweetClick = (text, timestamp) => {
+    saveFavorite = (text, timestamp) => {
         var data = { // preparing tweet for saving
             text: text, 
             timestamp: timestamp
@@ -33,7 +33,7 @@ class TweetList extends Component {
                         timestamp={tweet.timestamp} 
                         key={key}
                         user={this.props.user}
-                        onClick={this.handleTweetClick} 
+                        onClick={this.saveFavorite} 
                     />
                 )}
             </div>
