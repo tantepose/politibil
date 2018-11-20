@@ -25,9 +25,9 @@ const app = express();
 const moment = require('moment');
 const path = require('path');
 
-// set up Twit (using ./twitter-config.js for credencials)
+// set up Twit, using enviromental variables from heroku for credencials
+// const twitConfig = require('./twitter-config.js'); // use this for credencials in development
 const Twit = require('twit');
-// const twitConfig = require('./twitter-config.js'); // for development only
 const T = new Twit({
     consumer_key: process.env.consumer_key,
     consumer_secret: process.env.consumer_secret,
@@ -36,8 +36,8 @@ const T = new Twit({
 });
 console.log('Twitter configured!');
 
-// connect to database (using ./mlab-config.js for credencials)
-// const mlab_config = require('./mlab-config.js'); // for development only
+// connect to database, using enviromental variables from heroku for credencials
+// const mlab_config = require('./mlab-config.js'); // use this for credencials in development
 const MongoClient = require('mongodb').MongoClient;
 var db;
 MongoClient.connect(process.env.mlab_uri, 
