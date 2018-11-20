@@ -27,15 +27,20 @@ const path = require('path');
 
 // set up Twit (using ./twitter-config.js for credencials)
 const Twit = require('twit');
-const twitConfig = require('./twitter-config.js');
-const T = new Twit(twitConfig);
+// const twitConfig = require('./twitter-config.js'); // for development only
+const T = new Twit({
+    consumer_key: process.env.consumer_key,
+    consumer_secret: process.env.consumer_secret,
+    access_token: process.env.access_token,
+    access_token_secret: process.env.access_token_secret
+});
 console.log('Twitter configured!');
 
 // connect to database (using ./mlab-config.js for credencials)
-const mlab_config = require('./mlab-config.js');
+// const mlab_config = require('./mlab-config.js'); // for development only
 const MongoClient = require('mongodb').MongoClient;
 var db;
-MongoClient.connect(mlab_config.mlab_uri, 
+MongoClient.connect(process.env.mlab_uri, 
     { useNewUrlParser: true }, 
     (err, client) => {
         if (err) return console.log(err);
@@ -167,7 +172,7 @@ app.get('*', (req, res) => {
 
 // format and emojify tweets
 function styledTweets (data, district) {
-    
+
     // populate our array with only the tweet-text and custom timestamp
     let tweets = [];
     data.forEach(tweet => {
