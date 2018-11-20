@@ -197,6 +197,9 @@ function styledTweets (data, district) {
             .replace(/\blegevakten\b/gi, '🏥')
             .replace(/\blegevakta\b/gi, '🏥')
             
+            .replace(/\bpatrulje\b/gi, '🚓')
+            .replace(/\bpatruljen\b/gi, '🚓')
+
             .replace(/\bpolitibil\b/gi, '🚓')
             .replace(/\bpolitibilen\b/gi, '🚓')
             .replace(/\bpolitipatrulje\b/gi, '🚓')
@@ -233,7 +236,6 @@ function styledTweets (data, district) {
             .replace(/\bkatten\b/gi, '🐈')
             .replace(/\bkatta\b/gi, '🐈')
             
-            
             .replace(/\bbil\b/gi, '🚗')
             .replace(/\bbilen\b/gi, '🚗')
             .replace(/\bbiler\b/gi, '🚗')
@@ -243,6 +245,9 @@ function styledTweets (data, district) {
             
             .replace(/\blastebil\b/gi, '🚚')
             .replace(/\blastebilen\b/gi, '🚚')
+
+            .replace(/\btraktor\b/gi, '🚜')
+            .replace(/\btraktoren\b/gi, '🚜')
             
             .replace(/\bbuss\b/gi, '🚌')
             .replace(/\bbussen\b/gi, '🚌')
