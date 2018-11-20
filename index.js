@@ -23,6 +23,7 @@ features:
 const express = require('express');
 const app = express();
 const moment = require('moment');
+const path = require('path');
 
 // set up Twit (using ./twitter-config.js for credencials)
 const Twit = require('twit');
@@ -147,6 +148,12 @@ app.get('/api/user/', (req, res) => {
     });
 });
 
+// serving the react app from the express server
+app.use(express.static(path.join(__dirname, 'client/build')));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/client/build/index.html'))
+})
+
 /***
  *                _          
  *               (_)         
@@ -160,6 +167,7 @@ app.get('/api/user/', (req, res) => {
 
 // format and emojify tweets
 function styledTweets (data, district) {
+    
     // populate our array with only the tweet-text and custom timestamp
     let tweets = [];
     data.forEach(tweet => {
