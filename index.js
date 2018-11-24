@@ -20,13 +20,16 @@ features:
  */
 
 // general requirements
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').load();
+}
+
 const express = require('express');
 const app = express();
 const moment = require('moment');
 const path = require('path');
 
-// set up Twit, using enviromental variables from heroku for credencials
-// const twitConfig = require('./twitter-config.js'); // use this for credencials in development
+// set up Twit
 const Twit = require('twit');
 const T = new Twit({
     consumer_key: process.env.consumer_key,
@@ -36,8 +39,7 @@ const T = new Twit({
 });
 console.log('Twitter configured!');
 
-// connect to database, using enviromental variables from heroku for credencials
-// const mlab_config = require('./mlab-config.js'); // use this for credencials in development
+// connect to database
 const MongoClient = require('mongodb').MongoClient;
 var db;
 MongoClient.connect(process.env.mlab_uri, 
