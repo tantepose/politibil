@@ -39,7 +39,7 @@ header {
   margin-bottom: 50px;
 }
 
-/* TWEETS / MESSAGES */
+/* TWEETS & MESSAGES */
 
 .tweetList {
   display: flex;
@@ -117,6 +117,7 @@ input[type=text] {
   border: none;
   border-bottom: 1px solid #ddd;
   font-size: 1.2em;
+  width: 200px;
 }
 
 input[type=submit] {
@@ -126,18 +127,9 @@ input[type=submit] {
   font-size: 1.2em;
 }
 
+/* BREAKPOINTS, default is mobile */
 
-/* HEADER ANIMATION */
-
-header img {
-  width: 60%;
-  -webkit-animation-name: spaceboots;
-	-webkit-animation-duration: 0.8s;
-	-webkit-transform-origin:50% 50%;
-	-webkit-animation-iteration-count: infinite;
-	-webkit-animation-timing-function: linear;
-}
-
+/* tablets */
 @media screen and (min-width: 1000px) 
 {
     body
@@ -148,6 +140,7 @@ header img {
     }
 }
 
+/* computers */
 @media screen and (min-width: 1500px) 
 {
     body
@@ -156,6 +149,17 @@ header img {
       margin-left: 500px;
       margin-right: 500px;
     }
+}
+
+/* HEADER ANIMATION */
+
+header img {
+  width: 60%;
+  -webkit-animation-name: spaceboots;
+	-webkit-animation-duration: 0.8s;
+	-webkit-transform-origin:50% 50%;
+	-webkit-animation-iteration-count: infinite;
+	-webkit-animation-timing-function: linear;
 }
 
 @keyframes fade {

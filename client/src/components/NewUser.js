@@ -21,7 +21,7 @@ class NewUser extends React.Component {
 
     handleChange(event) {
         this.setState({
-            username: event.target.value
+            username: event.target.value 
         });
     }
 

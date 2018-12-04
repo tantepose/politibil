@@ -1,11 +1,11 @@
 /* 
-the express backend of politibil.no 
+the NodeJS/Express backend of politibil.no 
     by Ole Petter Baugerød Stokke
 
 features:
     * fetching tweets using Twit
-    * emojifying tweets using my own .replace bonanza
-    * reading and writing to a mlab database using MongoDB driver for Node.js 
+    * emojifying tweets using my own emojifier function
+    * reading and writing to a mlab database, using MongoDB driver for Node.js 
 */
 
 /***
@@ -19,15 +19,16 @@ features:
  *                        |_|    
  */
 
-// general requirements
-if (process.env.NODE_ENV !== 'production') {
-	require('dotenv').load();
-}
-
+ // general requirements
 const express = require('express');
 const app = express();
 const moment = require('moment');
 const path = require('path');
+
+// using .env for credencials
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').load();
+}
 
 // set up Twit
 const Twit = require('twit');
@@ -51,15 +52,15 @@ MongoClient.connect(process.env.mlab_uri,
     }
 );
 
-// set up body parser
-const bodyParser= require('body-parser');
+// set up body-parser
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // start server
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
-    console.log('Server listening! Port:', port);
+    console.log('Server listening! Port: ', port);
 });
 
 /***
@@ -73,11 +74,12 @@ app.listen(port, () => {
  *                                   
  */
 
-// get and style latests tweets from district
-app.get('/api/tweets/:district', function (req,res) {
-    console.log('fetching tweets from:', req.params.district);
+// GET /api/tweets/:district
+// get latest tweets from district
+app.get('/api/tweets/:district', function (req, res) {
+    console.log('fetching tweets from: ', req.params.district);
 
-    T.get('statuses/user_timeline', { // get all tweets
+    T.get('statuses/user_timeline', { // get the 200 latest tweets
         screen_name: req.params.district, 
         count: 200,
         tweet_mode: 'extended',
@@ -86,72 +88,65 @@ app.get('/api/tweets/:district', function (req,res) {
         trim_user: true
     }, (err, data) => {
         if (err) return console.log(err);
-        res.json(styledTweets(data, req.params.district)); // return all styled tweets
+        res.json(emojifyTweets(data, req.params.district)); // return all tweets emojified
     });
 });
 
-// create new user
+// POST /api/user/new
+// create a new user
 app.post('/api/user/new', (req, res) => {
-    console.log('creating user:', req.body.username);
+    console.log('creating user: ', req.body.username);
 
-    db.collection('users').insertOne({
+    db.collection('users').insertOne({ // insert new user to database
         username: req.body.username,
         district: req.body.district,
         favorites: []
     }, (err, result) => {
         if (err) return console.log(err)
-        res.json(req.body);
+        res.end(); // close request 
     });
 });
 
-// save a favorite tweet
+// POST /api/user/favorites/:username
+// save a favorite tweet on user in database
 app.post('/api/user/favorites/:username', (req, res) => {
-    console.log('saving favorite tweet for:', req.params.username);
+    console.log('saving favorite tweet for: ', req.params.username);
 
-    db.collection('users').updateOne(
-        { username: req.params.username }, // find this user
-        { $push: { favorites: req.body } }, // push favorite there
+    db.collection('users').updateOne( // update user in database
+        { username: req.params.username }, // find the user
+        { $push: { favorites: req.body } }, // push tweet to favorites array
         (err, result) => {
             if (err) return console.log(err)
-            res.json(req.body);
+            res.end(); // close request
         }
     )
 });
 
-// set district
+// POST /api/user/:username
+// set district on user in database
 app.post('/api/user/:username', (req, res) => {
     console.log('setting ' + req.body.district + ' as district for ' + req.params.username);
 
-    db.collection('users').updateOne({ username: req.params.username },
-        { $set: { district: req.body.district } }, 
+    db.collection('users').updateOne( // update user in database
+        { username: req.params.username }, // find the user
+        { $set: { district: req.body.district } }, // set district
         (err, result) => {
             if (err) return console.log(err)
-            res.json(req.body);
+            res.end(); // close request
         }
     )
 });
 
-// get user from username
+// GET /api/user/:username
+// get user from database
 app.get('/api/user/:username', (req, res) => {
     console.log('getting user:', req.params.username);
 
-    db.collection('users').find({ 
+    db.collection('users').findOne({ // find user in database
         username: req.params.username 
-    })
-    .toArray(function(err, result) {
-        if (err) return console.log(err)
-        res.json(result);
-    });
-});
-
-// get all users (for development only)
-app.get('/api/user/', (req, res) => {
-    console.log('getting all users');
-
-    db.collection('users').find()
-    .toArray(function(err, result) {
-        if (err) return console.log(err)
-        res.json(result);
+    }, (err, result) => {
+        if (err) return console.log(err);
+        res.json(result); // return user
     });
 });
 
@@ -173,9 +168,9 @@ app.get('*', (req, res) => {
  */
 
 // format and emojify tweets
-function styledTweets (data, district) {
+function emojifyTweets (data, district) {
 
-    // populate our array with only the tweet-text and custom timestamp
+    // formating: use only tweet-text, and add custom timestamp
     let tweets = [];
     data.forEach(tweet => {
         tweets.push({
@@ -184,10 +179,10 @@ function styledTweets (data, district) {
         });
     });
 
-    // replace words with emojis
+    // emojifying: replace words with emojis
     let emojiTweet;
-    tweets.forEach(function (tweet, index, array) {
-        emojiTweet = tweet.text
+    tweets.forEach(function (tweet, index, array) { // loop through all tweets
+        emojiTweet = tweet.text // replace words with emojis
             .replace(/\bnødetatene\b/gi, '🚓🚒🚑')
             
             .replace(/\bambulanse\b/gi, '🚑')
@@ -281,12 +276,12 @@ function styledTweets (data, district) {
             .replace(/\bkvinne\b/gi, '👩')
             .replace(/\bkvinnen\b/gi, '👩')
 
-        // get the emojified strings back into the array
+        // get the emojified string back into the array
         array[index] = {
             text: emojiTweet, 
             timestamp: tweet.timestamp,
         };
     });
 
-    return tweets; // return all styled tweets as JSON 
+    return tweets; // return all styled tweets
 }

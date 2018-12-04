@@ -17,8 +17,7 @@ class TweetList extends Component {
             headers: {
                 'Content-Type': 'application/json'
             }})
-            .then(res => res.json())
-            .then((response) => {
+            .then(() => {
                 this.props.fetchFavorites(); // fetch updated list of favorites
             } )
             .catch(error => console.error('Error saving favorite:', error));

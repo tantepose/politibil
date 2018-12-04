@@ -44,8 +44,8 @@ class Greeting extends React.Component {
         return (
             <div className="tweet">
                 { (this.props.user)
-                    ? <p>Ålbings, {this.props.user}! 👮</p>
-                    : <p>Ålbings! 👮</p>
+                    ? <p>Skal bli, {this.props.user}! 👮</p>
+                    : <p>Skal bli! 👮</p>
                 }
                 
                 { (this.state.loading) 

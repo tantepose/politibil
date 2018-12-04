@@ -1,6 +1,8 @@
+// import react and react-cookies
 import React, { Component } from 'react';
 import cookie from 'react-cookies'
 
+// import components
 import Header from './components/Header';
 import Loading from './components/Loading';
 import TweetList from './components/TweetList';
@@ -11,6 +13,7 @@ import Login from './components/Login';
 import Districts from './components/Districts';
 import NewUser from './components/NewUser';
 
+// disable a11y errors from emojis
 /* eslint-disable jsx-a11y/accessible-emoji */
 
 class App extends Component {
@@ -64,7 +67,7 @@ class App extends Component {
           }
         })
         .then(user => {
-          if (user.length === 0) { // user not found
+          if (!user) { // user not found
             this.setState({
               feedback: 'Finner ikke ' + username + '! 😿'
             });
@@ -72,13 +75,26 @@ class App extends Component {
             this.setState({
               user: username,
               showLogin: false,
-              district: user[0].district,
-              favorites: user[0].favorites,
+              district: user.district,
+              favorites: user.favorites,
               feedback: ''
             }, () => {
               this.fetchNewTweets();
-              cookie.save('user', this.state.user, { path: '/' });
-              cookie.save('district', this.state.district, { path: '/' });
+
+              // set cookies that expire in 99 days
+              const now = new Date();
+              const expires = new Date();
+              expires.setDate(now.getDate() + 99);
+              cookie.save('user', this.state.user, { 
+                path: '/',
+                expires,
+                maxAge: 1000
+              });
+              cookie.save('district', this.state.district, { 
+                path: '/',
+                expires,
+                maxAge: 1000
+              });
             });
           }
         })
@@ -118,7 +134,7 @@ class App extends Component {
         .then(res => res.json())
         .then(user => {
           this.setState({
-            favorites: user[0].favorites.reverse() // reverse() for latests favorites first
+            favorites: user.favorites.reverse() // reverse() for latests favorites first
           });
         })
         .catch(error => console.error('Error fetching favorites:', error));
@@ -129,7 +145,7 @@ class App extends Component {
     fetch('/api/user/' + username) // username allready claimed?
       .then(res => res.json())
       .then(user => {
-        if (user.length > 0) { // yes, print error
+        if (user) { // yes, print error
           this.setState({
             feedback: 'Navnet ' + username + ' er allerede tatt! 😿'
           })
@@ -142,14 +158,14 @@ class App extends Component {
             }),
             headers:{
                 'Content-Type': 'application/json'
-            }})
-            .then(res => res.json())
-            .then((response) => { // log in new user
-              this.login(username);
-              this.setState({
-                feedback: ''
-              });
-            })
+            }
+          })
+          .then(() => { // all good, log in new user
+            this.login(username);
+            this.setState({
+              feedback: ''
+            });
+          })
         }
       })
       .catch(error => console.error('Error creating user:', error));
@@ -191,7 +207,16 @@ class App extends Component {
       district: newDistrict
     }, () => {
       this.fetchNewTweets();
-      cookie.save('district', this.state.district, { path: '/' });
+
+      // set cookie that expire in 99 days
+      const now = new Date();
+      const expires = new Date();
+      expires.setDate(now.getDate() + 99);
+      cookie.save('district', this.state.district, { 
+        path: '/',
+        expires,
+        maxAge: 1000
+      });
     });
 
     // saving new district if user is logged in
