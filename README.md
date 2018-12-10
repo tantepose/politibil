@@ -2,9 +2,9 @@
 # 🚓 politibil.no 🚓
 ## by Ole Petter Baugerød Stokke
 
-### This is my submission for the capstone project in my full stack JavaScript Techdegree capstone project; "build your own web application". 
+This is my submission for the capstone project in my full stack JavaScript Techdegree capstone project; "build your own web application". 
 
-### My project, politibil.no (Norwegian for "police car"), is a Norwegian moile first site, that aims to make following your local police department easier and more fun. 
+My project, politibil.no (Norwegian for "police car"), is a Norwegian moile first site, that aims to make following your local police department easier and more fun. 
 
 # 💡 Why I made it
 In Norway, every police district has their own Twitter accounts. When the police scanners went dead a few years back, using Twitter was in part a solution for all journalists who no longer could follow their local police, and part a way of making police work more accessible for the Norwegian public. 
