@@ -1,14 +1,52 @@
-# politibil
-Kanskje en gang et capstone project for en Techdegree på Treehouse, i React.
+## Treehouse Full Stack JavaScript Techdegree Capstone Project:
+# 🚓 politibil.no 🚓
+## by Ole Petter Baugerød Stokke
 
-www.politibil.no
+### This is my submission for the capstone project in my full stack JavaScript Techdegree capstone project; "build your own web application". 
 
-Project Instructions
---------------------
+### My project, politibil.no (Norwegian for "police car"), is a Norwegian moile first site, that aims to make following your local police department easier and more fun. 
 
-To complete this project, follow the instructions below. If you get stuck, ask a question on Slack or in the Treehouse Community.
+# 💡 Why I made it
+In Norway, every police district has their own Twitter accounts. When the police scanners went dead a few years back, using Twitter was in part a solution for all journalists who no longer could follow their local police, and part a way of making police work more accessible for the Norwegian public. 
 
-[ 8 steps](https://teamtreehouse.com/projects/capstone-project-build-your-own-web-application#)
+All police districts report local events, big and small, using these Twitter accounts. Problem is; the avarage Norwegian doesn't use Twitter. And even if they do, navigating to the accounts can take precious time when police cars zip by. 
+
+Politibil.no gives you all the latests news from your local district fast, easy, fun and hazzle free on your phone. Plus a little extra.
+
+# 🔨 How I made it
+
+## Backend ⚙️
+A NodeJS/Express app does all the heavy lifting:
+* All data is managed thru a REST API.
+* The tweets are gathered using Twit. Then given a little emoji flair before being returned, by doing a fair bit of .replace() action on common words (such as "police", "car", "woman" etc.). 
+* Users may create an account. This is stored in a MongoDB database, using mLab, and can be accessed through simply typing in their username, or by the stored client side cookie. I choose not to use passwords, as the accounts store nothing of interest to others.
+* User accounts stores a username, their chosen police district (giving them tweets from the correct Twitter account) and their favorite tweets (which they can store by tapping on them, and view through the frontend).
+
+## Frontend 🖌️
+A React app does the job of displaying it all:
+* dsa
+* asd
+
+## Deployment 🚀
+The app is available on it's own .no-domain:
+* heroku
+* domeneshop
+* progressive web app
+
+# 📝 How to clone it
+To clone and review this app, you need to:
+1. asd
+2. asd
+
+# ⛰️ What all the Norwegian means
+
+For this app to make any sense in the real world, I had to make it in Norwegian. But fair not - here's a quick lesson:
+* asd: asd
+* asd: asd
+
+# 📚 All the rest
+
+Here's the project instructions from Treehouse:
 
 -   #### Set up your JavaScript-powered web app
 
@@ -45,20 +83,3 @@ To complete this project, follow the instructions below. If you get stuck, ask a
 -   #### Deploy your project
 
     -   Make your application available at a public URL, and submit the URL for review
-    -   See the resources section below for free hosting options
-        -   View Treehouse tutorials for deploying to [Heroku](https://www.heroku.com/), and using [mLab](https://mlab.com/) for a MongoDB instance, in the project resources
-
-    * * * * *
-
-    Project ideas:
-
-    -   Pull random popular hashtags from [Twitter](https://dev.twitter.com/rest/public) and display a corresponding gif using [Giphy](https://api.giphy.com/)
-    -   Use [Google Maps](https://developers.google.com/maps/) and [weather forecast data](https://developer.forecast.io/) to create an app that displays the forecast for an area on a map
-    -   Match a film with its soundtrack using the [OMDb](http://www.omdbapi.com/) and [Spotify](https://developer.spotify.com/web-api/endpoint-reference/) APIs
-    -   Combine the [Twitter API](https://dev.twitter.com/rest/public) with [Google Maps](https://developers.google.com/maps/) to create an app that displays location-specific information about any city where people actively use Twitter
-    -   Use the [Yelp](https://www.yelp.com/developers/documentation/v2/overview) and [Twitter API](https://dev.twitter.com/rest/public) to build a recommendation app that serves users suggested local businesses based on activity on Twitter
-    -   Use [Craigslist.org](http://www.craigslist.org/about/bulk_posting_interface) and [weather forecast data](https://developer.forecast.io/) to display the current weather of a pickup location
-    -   Combine [Craigslist.org](http://www.craigslist.org/about/bulk_posting_interface) with [Google Maps](https://developers.google.com/maps/) to get real-time traffic information about a pickup location
-    -   Show the point on a [Google Map](https://developers.google.com/maps/) directly below the current position of the [International Space Station](http://open-notify.org/Open-Notify-API/ISS-Location-Now/)
-
-    * * * * *
