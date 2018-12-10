@@ -25,7 +25,9 @@ const app = express();
 const moment = require('moment');
 const path = require('path');
 
-// using .env for credencials
+// use local .env file for credencials when running on local server
+// provide "consumer_key", "consumer_secret", "access_token" & "access_token_secret" from Twitter for Twit
+// and "mlab_uri" for connection to mLab database
 if (process.env.NODE_ENV !== 'production') {
 	require('dotenv').load();
 }
@@ -47,7 +49,7 @@ MongoClient.connect(process.env.mlab_uri,
     { useNewUrlParser: true }, 
     (err, client) => {
         if (err) return console.log(err);
-        db = client.db('politibil2');
+        db = client.db();
         console.log('mongoLab database connected!');
     }
 );

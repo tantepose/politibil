@@ -117,7 +117,9 @@ input[type=text] {
   border: none;
   border-bottom: 1px solid #ddd;
   font-size: 1.2em;
-  width: 200px;
+  display: inline;
+  width: 150px;
+  border-radius: 0;
 }
 
 input[type=submit] {
