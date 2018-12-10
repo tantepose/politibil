@@ -45,11 +45,13 @@ console.log('Twitter configured!');
 // connect to database
 const MongoClient = require('mongodb').MongoClient;
 var db;
+var dbName = 'politibilno';
+
 MongoClient.connect(process.env.mlab_uri, 
     { useNewUrlParser: true }, 
     (err, client) => {
         if (err) return console.log(err);
-        db = client.db();
+        db = client.db(dbName);
         console.log('mongoLab database connected!');
     }
 );
@@ -145,7 +147,7 @@ app.get('/api/user/:username', (req, res) => {
     console.log('getting user:', req.params.username);
 
     db.collection('users').findOne({ // find user in database
-        username: req.params.username 
+        username: req.params.username
     }, (err, result) => {
         if (err) return console.log(err);
         res.json(result); // return user

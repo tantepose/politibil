@@ -6,7 +6,7 @@ const Header = () => (
     <header>
         <img src={logo} className="App-logo" alt="logo" />
         <h1>politibil.no</h1>
-        <h2>«politiradio på nett»</h2>
+        <h2>politiradio på nett</h2>
     </header>
 );
 
