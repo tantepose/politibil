@@ -2,20 +2,20 @@
 # 🚓 politibil.no 🚓
 ## by Ole Petter Baugerød Stokke
 
-This is my submission for the capstone project in my full stack JavaScript Techdegree capstone project; "build your own web application". 
+This is my submission for the capstone project "Build your own web application" of my Treehouse Full Stack JavaScript Techdegree.
 
-My project, politibil.no (Norwegian for "police car"), is a Norwegian moile first site, that aims to make following your local police department easier and more fun. 
+My project, politibil.no (Norwegian for "police car"), is a Norwegian mobile first web app, that aims to make following local police departments easier and more fun. 
 
 # 💡 Why I made it
-In Norway, every police district has their own Twitter accounts. When the police scanners went dead a few years back, using Twitter was in part a solution for all journalists who no longer could follow their local police, and part a way of making police work more accessible for the Norwegian public. 
+In Norway, every police district has their own Twitter accounts. When the police scanners went dead a few years back, using Twitter was both a solution for journalists, and a way of making police work more accessible for the Norwegian public. 
 
 All police districts report local events, big and small, using these Twitter accounts. Problem is; the avarage Norwegian doesn't use Twitter. And even if they do, navigating to the accounts can take precious time when police cars zip by. 
 
-Politibil.no gives you all the latests news from your local district fast, easy, fun and hazzle free on your phone. Plus a little extra.
+Politibil.no gives you all the latests news from your local district fast, easy, fun and hazzle free on your phone, in a chat like format people are familiar with. Plus a little extra.
 
-# 🔨 How I made it
+# 🔨 How it works
 
-Politibil.no takes a police district Twitter handle, and outputs the tweets with a twist. It also gives users a way of quickly getting tweets from their local police district, and saving their favorites. 
+Politibil.no takes a police district's Twitter handle, and outputs the tweets with a twist. It also gives users a way of quickly getting tweets from their local police district, and saving their favorites. 
 
 ## Backend ⚙️
 A NodeJS/Express app does all the heavy lifting:
@@ -26,7 +26,7 @@ A NodeJS/Express app does all the heavy lifting:
 * All credentials (Twitter and mLab API keys) are stored using the dotenv module.
 
 ## Frontend 🖌️
-A React app gets the fun job of displaying it all:
+A React app does the job of displaying it all:
 * Users get a greeting from Giphy - mainly because Treehouse asked me to use at least two APIs, to be honest. 
 * If the user has a local cookie stored, and a user account, they are automaticly logged in. This brings tweets from their chosen police district, and loads their favorite tweets. If they have allready used politibil.no and therefore has a coockie, but no user account, the last district they chose will be loaded. 
 * Tweets are gathered through my own API, and displayed using my custom styled React components. 
@@ -34,11 +34,31 @@ A React app gets the fun job of displaying it all:
 * Users may at any point change their district, by choosing a district among all Norwegian police districts. This will be saved in their user account. 
 * Clicking a tweet while logged in will save this tweet as a favorite in their user account.
 
+## Database 💾
+All data is stored on an MongoDB database:
+* I'm using mLab, as it was a quick and easy way of getting it all set up. 
+* The "users" collection stores all users, with the following data structure per user:
+    ```
+    {
+        "_id": {
+            "$oid": // default ID field from mongoDB
+        },
+        "username": // string: username as made by user
+        "district": // string: user's chosen police district (Twitter handle)
+        "favorites": [ // array: all user's saved favorites
+            {
+                "text": // string: the tweet's text
+                "timestamp": // string: the tweet's timestamp, as @TwitterHandle, HH:MM DD/MM/YYYY
+            }
+        ]
+    }
+    ```
+    
 ## Deployment 🚀
 Politibil.no is, as it's name implies, available on it's own .no-domain:
 * Heroku hosts the backend and frontend, mirroring this Github repo. Credentials are given through Herokus config vars.
-* The domain is managed through the Norwegian hosting service Domeneshop. 
-* As this is a mobile first app, I have enabled Progressive Web App (PWA) behavior. Mainly the ability to make a shortcut with a custom icon, opening the app "as an app" (no visible browser).
+* The domain is managed through the Norwegian hosting service Domeneshop. I've yet to make the forwarding work as I intended, so politibil.no now simply forwards users to politibil.herokuapp.com. 
+* As this is a mobile first app, I have enabled Progressive Web App (PWA) behavior. Mainly the ability to make a shortcut with a custom icon, opening the site "as an app" (with no visible browser).
 
 # 📝 How to clone it
 To clone and review this app, you need to:
